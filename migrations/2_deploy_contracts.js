@@ -1,7 +1,7 @@
 var Token = artifacts.require("./Token.sol");
-var Staking = artifacts.require("./CryptoStaking.sol");
+var TokenWithStaking = artifacts.require("./TokenWithStaking.sol");
 
 module.exports = function (deployer) {
   deployer.deploy(Token);
-  deployer.deploy(Staking)
+  deployer.deploy(TokenWithStaking);
 };

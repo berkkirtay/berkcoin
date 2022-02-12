@@ -28,7 +28,7 @@ li.nav {
   display: inline-block;
 }
 
-li.nav a{
+li.nav a {
   display: block;
   color: black;
   text-align: center;
@@ -94,36 +94,20 @@ h2 {
   font-size: 1.2em;
 }
 
-#newOrder button {
-  text-align: center;
-  margin-top: 20px;
-  background: #333;
-  color: white;
-  padding: 6px;
-  border: 0;
-  font-size: 1.2em;
-  cursor: pointer;
-  margin-left: 39%;
-}
-
-#newOrder button:hover:not(.active) {
-  background-color: #0742c0;
-}
-
-#newOrder button:active {
-  transform: scale(0.9);
-}
-
 button {
+  font-size: 90%;
   text-align: center;
-  margin-top: 20px;
   background: #333;
   color: white;
-  padding: 15px;
+  padding: 8px;
   border: 0;
   font-size: 1.2em;
   cursor: pointer;
-  margin-left: 30%;
+  position: relative;
+  border-radius: 8px;
+  touch-action: manipulation;
+  transition: box-shadow .2s,-ms-transform .1s,-webkit-transform .1s,transform .1s;
+  margin: 0 auto;
 }
 
 button:hover:not(.active) {
@@ -161,4 +145,15 @@ button:active {
 
 #order {
   border: 1px solid rgb(51, 51, 51);
+}
+
+.footer {
+  position: fixed;
+  display: block;
+  color: black;
+  text-align: center;
+  padding: 20px 25px;
+  text-decoration: none;
+  font-weight: bold;
+  cursor: pointer;
 }

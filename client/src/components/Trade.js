@@ -2,13 +2,26 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useState } from "react"
-const Trade = ({ deposit, withdraw, balance, ethBalance }) => {
-    const [depositAmount, setdepositAmount] = useState(0);
+const Trade = ({ account, contract, balance, ethBalance, getBalance }) => {
+    const [depositAmount, setDepositAmount] = useState(0);
     const [depositPrice, setDepositPrice] = useState(0);
 
     const [withdrawAmount, setWithdrawAmount] = useState(0);
     const [withdrawPrice, setWithdrawPrice] = useState(0);
     const navigate = useNavigate();
+
+    const deposit = async (amount) => {
+        await contract.methods.deposit()
+            .send({ from: account, value: amount * 10 ** 18 });
+        getBalance();
+    };
+
+    const withdraw = async (amount) => {
+        const amountStr = (amount * 10 ** 18).toString();
+        await contract.methods.withdraw(amountStr)
+            .send({ from: account });
+        getBalance();
+    };
 
     const onBuy = (e) => {
         e.preventDefault();
@@ -30,11 +43,11 @@ const Trade = ({ deposit, withdraw, balance, ethBalance }) => {
                 <form id="newOrder" onSubmit={onBuy}>
                     <label>Amount: </label>
                     <input type="number" required
-                        value={depositAmount} onChange={(e) => setdepositAmount(e.target.value)} />
+                        value={depositAmount} onChange={(e) => setDepositAmount(e.target.value)} />
                     <label>Price: </label>
                     <input type="number" required
                         value={depositPrice} onChange={(e) => setDepositPrice(e.target.value)} />
-                    <button style={{ display: "inline-block" }}>Buy berkcoin</button>
+                    <button style={{ display: "inline-block", marginLeft: "39%" }}>Buy berkcoin</button>
                 </form>
             </div>
             <div id="trade-child">
@@ -47,7 +60,7 @@ const Trade = ({ deposit, withdraw, balance, ethBalance }) => {
                     <label>Price: </label>
                     <input type="number" required
                         value={withdrawPrice} onChange={(e) => setWithdrawPrice(e.target.value)} />
-                    <button style={{ display: "inline-block" }}>Sell berkcoin</button>
+                    <button style={{ display: "inline-block", marginLeft: "39%" }}>Sell berkcoin</button>
                 </form>
             </div>
         </div>

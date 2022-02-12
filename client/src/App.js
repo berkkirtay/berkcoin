@@ -2,9 +2,9 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate, Navigate } from "react-router-dom"
 import { useState, useEffect } from "react"
 
-import getWeb3 from "./getWeb3";
-import Token from "./contracts/Token.json"
-import CryptoStaking from "./contracts/CryptoStaking.json";
+import getWeb3 from "./services/getWeb3";
+
+import CryptoStaking from "./contracts/TokenWithStaking";
 
 
 import Nav from "./components/Nav";
@@ -12,6 +12,7 @@ import Wallet from "./components/Wallet";
 import Market from "./components/Market";
 import Trade from "./components/Trade";
 import Staking from "./components/Staking";
+import { Footer } from './components/Footer';
 
 function App() {
   // Rewriting truffle generated code for react hooks:
@@ -41,9 +42,9 @@ function App() {
 
       // Get the contract instance.
       const networkId = await web3.eth.net.getId();
-      const deployedNetwork = Token.networks[networkId];
+      const deployedNetwork = CryptoStaking.networks[networkId];
       const instance = new web3.eth.Contract(
-        Token.abi,
+        CryptoStaking.abi,
         deployedNetwork && deployedNetwork.address,
       );
 
@@ -65,38 +66,52 @@ function App() {
   const getBalance = async () => {
     const response = await contract.methods.getBalance(accounts[0])
       .call({ from: accounts[0] });
-    setBalance(response);
+    setBalance(response / 10 ** 18);
     const ethBalance = await web3.eth.getBalance(accounts[0]);
     setEthBalance(web3.utils.fromWei(ethBalance, 'ether'));
   };
 
-  const deposit = async (amount) => {
-    await contract.methods.deposit()
-      .send({ from: accounts[0], value: amount * 10 ** 18 });
-    getBalance();
-  };
-
-  const withdraw = async (amount) => {
-    await contract.methods.withdraw(amount)
-      .send({ from: accounts[0] });
-    getBalance();
-  };
-
 
   if (web3 === undefined || accounts === undefined || contract === undefined) {
-    return <div>Loading Web3, accounts, and contract...</div>;
+    return (
+      <div>
+        <Footer
+          account={undefined}
+          connect={() => window.location.reload()} />
+      </div>
+    );
   }
 
   return (
     <Router>
+      <Footer
+        account={accounts[0]}
+      />
       <Nav />
       <Routes>
         <Route path='/' element={<Navigate to={"/wallet"} />} />
-        <Route path='/wallet' element={<Wallet web3={web3} account={accounts[0]} balance={balance} />} />
-        <Route path='/market' element={<Market orders={undefined} />} />
-        <Route path='/trade' element={<Trade deposit={deposit} withdraw={withdraw} balance={balance} ethBalance={ethBalance} />} />
-        <Route path='/staking' element={<Staking account={accounts[0]} />} />
+
+        <Route path='/wallet' element={<Wallet
+          web3={web3}
+          account={accounts[0]}
+          balance={balance} />} />
+
+        <Route path='/market' element={<Market
+          orders={undefined} />} />
+
+        <Route path='/trade' element={<Trade
+          account={accounts[0]}
+          contract={contract}
+          balance={balance}
+          ethBalance={ethBalance}
+          getBalance={getBalance} />} />
+
+        <Route path='/staking' element={<Staking
+          account={accounts[0]}
+          contract={contract}
+          balance={balance} />} />
       </Routes>
+      -
     </Router>
   );
 }
