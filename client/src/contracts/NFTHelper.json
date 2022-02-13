@@ -1,0 +1,119 @@
+{
+  "contractName": "NFTHelper",
+  "abi": [],
+  "metadata": "{\"compiler\":{\"version\":\"0.8.11+commit.d7f03943\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/NFTHelper.sol\":\"NFTHelper\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/NFTHelper.sol\":{\"keccak256\":\"0x7ec04e68e645c6c677b4dd66b2bfb80ab55262b9f3a57b42c2363454fcd2e159\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://87c801840350e54b5addd0c71a2ada3d4804c3822d285e74291819e7b41b66fe\",\"dweb:/ipfs/QmUgooLEdUMzB1RpR7D9iKP27Kj1PfFrKn894dk1wyqCCb\"]}},\"version\":1}",
+  "bytecode": "0x6080604052348015600f57600080fd5b50603f80601d6000396000f3fe6080604052600080fdfea26469706673582212208e7cc23e52bbebf6173fb00b6c679092281894f845ff1820337cb1381779444764736f6c634300080b0033",
+  "deployedBytecode": "0x6080604052600080fdfea26469706673582212208e7cc23e52bbebf6173fb00b6c679092281894f845ff1820337cb1381779444764736f6c634300080b0033",
+  "immutableReferences": {},
+  "generatedSources": [],
+  "deployedGeneratedSources": [],
+  "sourceMap": "62:21:3:-:0;;;;;;;;;;;;;;;;;;;",
+  "deployedSourceMap": "62:21:3:-:0;;;;;",
+  "source": "// SPDX-License-Identifier: MIT\r\n\r\npragma solidity ^0.8.0;\r\n\r\ncontract NFTHelper {}\r\n",
+  "sourcePath": "C:\\Users\\Berk\\Desktop\\GitHub Project Repositories\\berkcoin\\dapp\\contracts\\NFTHelper.sol",
+  "ast": {
+    "absolutePath": "project:/contracts/NFTHelper.sol",
+    "exportedSymbols": {
+      "NFTHelper": [
+        548
+      ]
+    },
+    "id": 549,
+    "license": "MIT",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 547,
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "35:23:3"
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "canonicalName": "NFTHelper",
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "fullyImplemented": true,
+        "id": 548,
+        "linearizedBaseContracts": [
+          548
+        ],
+        "name": "NFTHelper",
+        "nameLocation": "71:9:3",
+        "nodeType": "ContractDefinition",
+        "nodes": [],
+        "scope": 549,
+        "src": "62:21:3",
+        "usedErrors": []
+      }
+    ],
+    "src": "35:50:3"
+  },
+  "legacyAST": {
+    "absolutePath": "project:/contracts/NFTHelper.sol",
+    "exportedSymbols": {
+      "NFTHelper": [
+        548
+      ]
+    },
+    "id": 549,
+    "license": "MIT",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 547,
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "35:23:3"
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "canonicalName": "NFTHelper",
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "fullyImplemented": true,
+        "id": 548,
+        "linearizedBaseContracts": [
+          548
+        ],
+        "name": "NFTHelper",
+        "nameLocation": "71:9:3",
+        "nodeType": "ContractDefinition",
+        "nodes": [],
+        "scope": 549,
+        "src": "62:21:3",
+        "usedErrors": []
+      }
+    ],
+    "src": "35:50:3"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.8.11+commit.d7f03943.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.4.4",
+  "updatedAt": "2022-02-13T17:42:22.303Z",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {},
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  }
+}

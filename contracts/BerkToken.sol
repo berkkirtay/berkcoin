@@ -8,14 +8,18 @@
 
 pragma solidity ^0.8.0;
 
-contract TokenWithStaking {
+import "./IToken.sol";
+
+contract BerkToken is IToken {
     mapping(address => uint256) public balances;
     mapping(address => uint256) public accountStakeDates;
     mapping(address => uint256) public accountStakeAmounts;
     mapping(address => uint256) public latestStakeRewards;
 
     // Stake reward rate
-    uint256 private constant interest = 1;
+    uint256 private constant interest = 5;
+
+    uint256 private constant maxSupply = 10000000;
 
     /*
      * Transaction is processed within contract:
@@ -71,28 +75,36 @@ contract TokenWithStaking {
 
     function calculateStakeReward(uint256 amountToBeStaked, uint256 duration)
         private
-        view
+        pure
         returns (uint256)
     {
         uint256 stakeRate = interest;
-        // More than one day:
-        if (duration > 24 * 60 * 60) {
-            stakeRate = stakeRate * 2;
-        }
+        stakeRate = stakeRate * duration;
+
         // More than 100 ETH:
         if (amountToBeStaked > 100) {
             stakeRate = stakeRate * 2;
         }
-        uint256 contractBalance = getContractBalance();
-        return (stakeRate * contractBalance) / 10000;
+        return stakeRate / 10000;
     }
 
-    function deposit() public payable {
+    function deposit(uint256 amount) public payable {
         require(msg.value > 1, "Deposit amount must be more than 1 wei!");
 
-        uint256 depositedAmount = msg.value;
-        balances[msg.sender] += depositedAmount;
+        uint256 tokenPrice = getTokenPrice();
 
+        require(
+            msg.value >= amount * tokenPrice,
+            "Deposit amount worth must be at least 1 berkcoin!"
+        );
+
+        // Here we get token amount based on the deposited ETH amount:
+        // If user deposit 1 ETH and current token price is 0.2 ETH, then
+        // user will have 5 tokens in his account address.
+
+        // uint256 depositedAmount = msg.value;
+        // balances[msg.sender] += depositedAmount / tokenPrice;
+        balances[msg.sender] += amount;
         emit Deposit(msg.sender, msg.value);
     }
 
@@ -102,7 +114,9 @@ contract TokenWithStaking {
             "You don't have enough funds in your bank account!"
         );
 
-        payable(msg.sender).transfer(amount);
+        uint256 tokenPrice = getTokenPrice();
+
+        payable(msg.sender).transfer(amount * tokenPrice);
         balances[msg.sender] -= amount;
 
         emit Withdraw(msg.sender, amount);
@@ -161,6 +175,20 @@ contract TokenWithStaking {
 
     function getInterest() public pure returns (uint256) {
         return interest;
+    }
+
+    function getTokenPrice() public view returns (uint256) {
+        uint256 contractBalance = getContractBalance();
+        uint256 tokenPrice = contractBalance / maxSupply;
+
+        // If it is the first transaction on this smart contract,
+        // token price will be 0. To prevent multiply error, we
+        // assing token price with the lowest possible value 1.
+
+        if (tokenPrice == 0) {
+            tokenPrice = 1;
+        }
+        return tokenPrice;
     }
 
     function getContractBalance() public view returns (uint256) {

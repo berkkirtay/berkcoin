@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 
 import getWeb3 from "./services/getWeb3";
 
-import CryptoStaking from "./contracts/TokenWithStaking";
+import BerkToken from "./contracts/BerkToken";
 
 
 import Nav from "./components/Nav";
@@ -42,9 +42,9 @@ function App() {
 
       // Get the contract instance.
       const networkId = await web3.eth.net.getId();
-      const deployedNetwork = CryptoStaking.networks[networkId];
+      const deployedNetwork = BerkToken.networks[networkId];
       const instance = new web3.eth.Contract(
-        CryptoStaking.abi,
+        BerkToken.abi,
         deployedNetwork && deployedNetwork.address,
       );
 
@@ -66,7 +66,7 @@ function App() {
   const getBalance = async () => {
     const response = await contract.methods.getBalance(accounts[0])
       .call({ from: accounts[0] });
-    setBalance(response / 10 ** 18);
+    setBalance(response);
     const ethBalance = await web3.eth.getBalance(accounts[0]);
     setEthBalance(web3.utils.fromWei(ethBalance, 'ether'));
   };
@@ -111,7 +111,6 @@ function App() {
           contract={contract}
           balance={balance} />} />
       </Routes>
-      -
     </Router>
   );
 }

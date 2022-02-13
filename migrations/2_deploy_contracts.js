@@ -1,7 +1,5 @@
-var Token = artifacts.require("./Token.sol");
-var TokenWithStaking = artifacts.require("./TokenWithStaking.sol");
+var BerkToken = artifacts.require("./BerkToken.sol");
 
 module.exports = function (deployer) {
-  deployer.deploy(Token);
-  deployer.deploy(TokenWithStaking);
+  deployer.deploy(BerkToken);
 };

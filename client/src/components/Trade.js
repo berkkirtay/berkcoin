@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useState } from "react"
@@ -10,28 +10,39 @@ const Trade = ({ account, contract, balance, ethBalance, getBalance }) => {
     const [withdrawPrice, setWithdrawPrice] = useState(0);
     const navigate = useNavigate();
 
-    const deposit = async (amount) => {
-        await contract.methods.deposit()
-            .send({ from: account, value: amount * 10 ** 18 });
+    useEffect(() => {
+        const fetchCurrentTokenPrice = async () => {
+            const response = await contract.methods.getTokenPrice()
+                .call({ from: account });
+
+            setDepositPrice(response / 10 ** 18);
+            setWithdrawPrice(response / 10 ** 18);
+        }
+
+        fetchCurrentTokenPrice();
+    }, []);
+
+    const deposit = async () => {
+        await contract.methods.deposit(depositAmount)
+            .send({ from: account, value: (depositAmount * depositPrice * 10 ** 14).toString(10) + "0000" });
         getBalance();
     };
 
-    const withdraw = async (amount) => {
-        const amountStr = (amount * 10 ** 18).toString();
-        await contract.methods.withdraw(amountStr)
+    const withdraw = async () => {
+        await contract.methods.withdraw(withdrawAmount)
             .send({ from: account });
         getBalance();
     };
 
     const onBuy = (e) => {
         e.preventDefault();
-        deposit(depositAmount * depositPrice);
+        deposit();
         navigate('/wallet');
     }
 
     const onSell = (e) => {
         e.preventDefault();
-        withdraw(withdrawAmount * withdrawPrice);
+        withdraw();
         navigate('/wallet');
     }
 
@@ -44,9 +55,10 @@ const Trade = ({ account, contract, balance, ethBalance, getBalance }) => {
                     <label>Amount: </label>
                     <input type="number" required
                         value={depositAmount} onChange={(e) => setDepositAmount(e.target.value)} />
-                    <label>Price: </label>
+                    <label>Current Price: </label>
                     <input type="number" required
                         value={depositPrice} onChange={(e) => setDepositPrice(e.target.value)} />
+                    <h3 style={{ color: "green", textAlign: "center" }}>You will pay {depositAmount * depositPrice} ETH</h3>
                     <button style={{ display: "inline-block", marginLeft: "39%" }}>Buy berkcoin</button>
                 </form>
             </div>
@@ -57,9 +69,10 @@ const Trade = ({ account, contract, balance, ethBalance, getBalance }) => {
                     <label>Amount: </label>
                     <input type="number" required
                         value={withdrawAmount} onChange={(e) => setWithdrawAmount(e.target.value)} />
-                    <label>Price: </label>
+                    <label>Current Price: </label>
                     <input type="number" required
                         value={withdrawPrice} onChange={(e) => setWithdrawPrice(e.target.value)} />
+                    <h3 style={{ color: "green", textAlign: "center" }}>You will get {withdrawAmount * withdrawPrice} ETH</h3>
                     <button style={{ display: "inline-block", marginLeft: "39%" }}>Sell berkcoin</button>
                 </form>
             </div>

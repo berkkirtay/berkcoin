@@ -32,7 +32,7 @@ const Staking = ({ account, contract, balance }) => {
 
     const onStake = async (e) => {
         e.preventDefault();
-        await contract.methods.stake(stakeDuration * 60 * 60, (depositAmount * 10 ** 18).toString())
+        await contract.methods.stake(stakeDuration * 60 * 60, depositAmount)
             .send({ from: account });
 
         setRefresh(!refresh);
@@ -41,13 +41,13 @@ const Staking = ({ account, contract, balance }) => {
     const getStakedAmount = async () => {
         const response = await contract.methods.getStakeAmount(account)
             .call({ from: account });
-        setStakedBalance(response / 10 ** 18);
+        setStakedBalance(response);
     };
 
     const getCurrentStakeReward = async () => {
         const response = await contract.methods.getCurrentStakeReward(account)
             .call({ from: account });
-        setStakeReward(response / 10 ** 18);
+        setStakeReward(response);
     };
 
     const getStakeCompletionDate = async () => {
@@ -78,17 +78,13 @@ const Staking = ({ account, contract, balance }) => {
 
     const calculateStakeReward = () => {
         let stakeRate = interestRate;
-        // More than one day:
-        if (stakeDuration > 24 * 60 * 60) {
-            stakeRate = stakeRate * 2;
-        }
+        stakeRate = stakeRate * stakeDuration * 60 * 60;
+
         // More than 100 ETH:
         if (depositAmount > 100) {
             stakeRate = stakeRate * 2;
         }
-
-        const response = stakeRate * availableStake / 10000;
-        setCalculatedStakeReward(response / 10 ** 18);
+        setCalculatedStakeReward(stakeRate / 10000);
     }
 
     const checkStakeStatus = async () => {
@@ -115,7 +111,7 @@ const Staking = ({ account, contract, balance }) => {
     }
     return (
         <div>
-            <h3>Wallet Public Address: {account} <span style={{ float: "right" }}> Available Rewards: {availableStake} berkcoins</span></h3>
+            <h3>Wallet Public Address: {account} <span style={{ float: "right" }}> Total Circulation Value: {availableStake} ETH</span></h3>
             <h3>Balance: {balance}</h3>
             <h3>Staked amount: {stakedBalance}</h3>
             <h3>Earnings from staking : {stakeReward}</h3>
