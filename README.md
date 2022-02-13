@@ -13,3 +13,11 @@ cd client && npm run start
 
 ## Screenshots of Client:
 
+### Token staking: 
+
+![Enc1](https://raw.githubusercontent.com/berkkirtay/berkcoin/main/examples/Capture.PNG)
+
+### Token Trade: 
+
+![Enc1](https://raw.githubusercontent.com/berkkirtay/berkcoin/main/examples/Capture2.PNG)
+
