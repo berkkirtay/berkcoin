@@ -17,9 +17,10 @@ code {
 }
 
 ul.nav {
-  display: block;
+  display: inline-block;
   list-style-type: none;
   margin: auto;
+
   overflow: hidden;
   text-align: center;
 }
@@ -38,7 +39,7 @@ li.nav a {
 }
 
 li.nav a:hover:not(li.nav a:active) {
-  color: #0742c0;
+  color: #0344d1;
 }
 
 li.nav a:active {
@@ -66,15 +67,16 @@ h2 {
 }
 
 #newOrder input {
-  display: block;
+  display:flex;
   width: 80%;
-  margin: 10px;
+  margin: 0 auto;
   padding: 8px;
 }
 
 #newOrder label {
   font-size: 1.2em;
-  display: block;
+  display:flex;
+  margin: 0 auto;
   margin-bottom: 20px;
 }
 
@@ -84,12 +86,14 @@ h2 {
   align-items: center;
   text-align: center;
   width: 50%;
+  margin: 0 auto;
   margin: 15px;
   padding: 8px;
   margin-left: 25%;
 }
 
 #newOrder label {
+  display:flex;
   margin-left: 25%;
   font-size: 1.2em;
 }
@@ -147,13 +151,11 @@ button:active {
   border: 1px solid rgb(51, 51, 51);
 }
 
-.footer {
-  position: fixed;
-  display: block;
+.header {
+  float:left;
   color: black;
   text-align: center;
-  padding: 20px 25px;
-  text-decoration: none;
+  padding: 20px;
   font-weight: bold;
   cursor: pointer;
 }

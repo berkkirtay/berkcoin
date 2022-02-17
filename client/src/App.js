@@ -7,12 +7,12 @@ import getWeb3 from "./services/getWeb3";
 import BerkToken from "./contracts/BerkToken";
 
 
-import Nav from "./components/Nav";
-import Wallet from "./components/Wallet";
-import Market from "./components/Market";
-import Trade from "./components/Trade";
-import Staking from "./components/Staking";
-import { Footer } from './components/Footer';
+import Nav from "./components/PageComponents/Nav";
+import Wallet from "./components/TokenComponents/Wallet";
+import Market from "./components/CollectibleComponents/Market";
+import Trade from "./components/TokenComponents/Trade";
+import Staking from "./components/TokenComponents/Staking";
+import { Header } from './components/PageComponents/Header';
 
 function App() {
   // Rewriting truffle generated code for react hooks:
@@ -75,7 +75,7 @@ function App() {
   if (web3 === undefined || accounts === undefined || contract === undefined) {
     return (
       <div>
-        <Footer
+        <Header
           account={undefined}
           connect={() => window.location.reload()} />
       </div>
@@ -84,7 +84,7 @@ function App() {
 
   return (
     <Router>
-      <Footer
+      <Header
         account={accounts[0]}
       />
       <Nav />
@@ -97,7 +97,8 @@ function App() {
           balance={balance} />} />
 
         <Route path='/market' element={<Market
-          orders={undefined} />} />
+          account={accounts[0]}
+          contract={contract} />} />
 
         <Route path='/trade' element={<Trade
           account={accounts[0]}

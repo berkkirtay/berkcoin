@@ -9,6 +9,7 @@
 pragma solidity ^0.8.0;
 
 import "./IToken.sol";
+import "./CollectibleToken.sol";
 
 contract BerkToken is IToken {
     mapping(address => uint256) public balances;
@@ -19,7 +20,15 @@ contract BerkToken is IToken {
     // Stake reward rate
     uint256 private constant interest = 5;
 
-    uint256 private constant maxSupply = 10000000;
+    uint256 private constant maxSupply = 1000000000;
+
+    CollectibleToken private collectibleToken;
+
+    mapping(uint256 => bool) public onSaleCollectibles;
+
+    constructor() {
+        collectibleToken = new CollectibleToken();
+    }
 
     /*
      * Transaction is processed within contract:
@@ -186,13 +195,83 @@ contract BerkToken is IToken {
         // assing token price with the lowest possible value 1.
 
         if (tokenPrice == 0) {
-            tokenPrice = 1;
+            tokenPrice = 100000;
         }
         return tokenPrice;
     }
 
     function getContractBalance() public view returns (uint256) {
         return address(this).balance;
+    }
+
+    // NFT Handlers:
+
+    function registerNewCollectible(
+        string memory tokenUri,
+        string memory description,
+        uint256 price
+    ) public {
+        collectibleToken.createNewCollectible(
+            tokenUri,
+            description,
+            price,
+            msg.sender
+        );
+        require(
+            balances[msg.sender] >= price / 1000,
+            "Sender doesn't have enough funds to pay registration fee!"
+        );
+        balances[msg.sender] -= price / 1000;
+    }
+
+    function setPriceOfCollectible(uint256 tokenID, uint256 price) public {
+        collectibleToken.setPriceOfCollectible(tokenID, price);
+    }
+
+    function buyCollectible(uint256 tokenID) public {
+        uint256 price = collectibleToken.getPriceOfCollectible(tokenID);
+        require(
+            price <= balances[msg.sender],
+            "Sender doesn't have enough funds!"
+        );
+        balances[msg.sender] -= price;
+        collectibleToken.transferCollectible(msg.sender, tokenID);
+    }
+
+    function sellCollectible(uint256 tokenID) public {
+        onSaleCollectibles[tokenID] = true;
+    }
+
+    function getTokenURI(uint256 tokenID) public view returns (string memory) {
+        return collectibleToken.getTokenURI(tokenID);
+    }
+
+    function getTokenOwner(uint256 tokenID) public view returns (address) {
+        return collectibleToken.getTokenOwner(tokenID);
+    }
+
+    function getTokenDescription(uint256 tokenID)
+        public
+        view
+        returns (string memory)
+    {
+        return collectibleToken.getTokenDescription(tokenID);
+    }
+
+    function getTokenHash(uint256 tokenID) public view returns (bytes32) {
+        return collectibleToken.getTokenHash(tokenID);
+    }
+
+    function getPriceOfCollectible(uint256 tokenID)
+        public
+        view
+        returns (uint256)
+    {
+        return collectibleToken.getPriceOfCollectible(tokenID);
+    }
+
+    function getTokenCount() public view returns (uint256) {
+        return collectibleToken.getTokenCount();
     }
 
     event Sent(address from, address to, uint256 amount);

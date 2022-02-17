@@ -5,6 +5,8 @@
   "dependencies": {
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-loader-spinner": "^5.1.4",
+    "react-modal": "^3.14.4",
     "react-router-dom": "^6.2.1",
     "react-scripts": "3.2.0",
     "web3": "^1.7.0"

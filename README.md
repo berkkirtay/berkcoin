@@ -3,6 +3,11 @@
 ### Basic usage:
 Any network can be used via getWeb3 function.
 
+### Requirements:
+- Metamask
+- Any Ethereum testnet (preferably you can use ganache)
+- Truffle (in order to compile new contracts)
+
 - Compile Contracts:
 1. Set related fields in truffle-config.js
 2. On command line: truffle develop
