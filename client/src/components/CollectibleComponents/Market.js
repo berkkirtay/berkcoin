@@ -7,7 +7,7 @@ import Collectible from "./Collectible";
 import RegisterModal from "./RegisterModal";
 
 
-const Trade = ({ account, contract }) => {
+const Market = ({ account, contract }) => {
     const [modalState, setModalState] = useState(false);
     const [collectibles, setCollectibles] = useState(undefined);
     const [refresh, setRefresh] = useState(false);
@@ -17,6 +17,10 @@ const Trade = ({ account, contract }) => {
     useEffect(() => {
         getAllNFTs();
     }, [refresh])
+
+    useEffect(() => {
+        navigate("/market");
+    }, [sort]);
 
 
     const getAllNFTs = async () => {
@@ -32,19 +36,35 @@ const Trade = ({ account, contract }) => {
                 .call({ from: account });
             const priceOfCollectible = await contract.methods.getPriceOfCollectible(i)
                 .call({ from: account });
+            const collectibleHash = await await contract.methods.getTokenHash(i)
+                .call({ from: account });
+
+            // Price level:
+            var priceLevel = "green";
+            if (priceOfCollectible >= 200000) {
+                priceLevel = "darkviolet";
+            }
+            else if (priceOfCollectible >= 100000) {
+                priceLevel = "#FF7102";
+            }
+            else if (priceOfCollectible >= 50000) {
+                priceLevel = "red";
+            }
+            else if (priceOfCollectible >= 10000) {
+                priceLevel = "blue";
+            }
 
             const Collectible = {
                 "tokenID": i,
                 "tokenURI": tokenURI,
                 "tokenOwner": tokenOwner,
                 "tokenDescription": tokenDescription,
-                "priceOfCollectible": priceOfCollectible
+                "priceOfCollectible": priceOfCollectible,
+                "collectibleHash": collectibleHash,
+                "priceLevel": priceLevel
             }
-            console.log(Collectible)
             collectibles.push(Collectible);
         }
-
-
         setCollectibles(collectibles);
     }
 
@@ -82,7 +102,6 @@ const Trade = ({ account, contract }) => {
             setSort("Sort By Price");
             getAllNFTs();
         }
-        navigate("/market");
     }
 
     return (
@@ -96,7 +115,10 @@ const Trade = ({ account, contract }) => {
                 onRegister={onRegister} />}
             <ul style={{ listStyleType: "none" }}>
                 {collectibles !== undefined && collectibles.slice(0).map((collectible) => (
-                    <Collectible collectible={collectible} />
+                    <Collectible
+                        account={account}
+                        collectible={collectible}
+                    />
                 ))}
                 {collectibles === undefined &&
                     <div style={{ display: "flex", justifyContent: "center" }}>
@@ -108,4 +130,4 @@ const Trade = ({ account, contract }) => {
     )
 }
 
-export default Trade
+export default Market
