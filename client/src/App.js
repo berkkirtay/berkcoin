@@ -89,7 +89,7 @@ function App() {
       />
       <Nav />
       <Routes>
-        <Route path='/berkcoin/' element={<Navigate to={"/wallet"} />} />
+        <Route path='/berkcoin/' element={<Navigate to={"/berkcoin/wallet"} />} />
 
         <Route path='/berkcoin/wallet' element={<Wallet
           web3={web3}
