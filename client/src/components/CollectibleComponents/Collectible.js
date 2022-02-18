@@ -35,7 +35,7 @@ const Collectible = ({ account, collectible, onBuy, onSetPrice, fee }) => {
                     <img style={{ width: "250px", height: "250px", borderRadius: "10%" }} src={collectible.tokenURI} />
                     <p style={{ color: collectible.priceLevel, textAlign: "center", fontWeight: "bold" }}>{collectible.tokenDescription}</p>
                     <p style={{ color: collectible.priceLevel, textAlign: "center", fontWeight: "bold" }}>{collectible.priceOfCollectible} berkcoins</p>
-                    {collectible.availability === true && <p style={{ color: "blue", textAlign: "center", fontWeight: "bold" }}>(Available to buy)</p>}
+                    {collectible.availability === true && <p style={{ color: "blue", textAlign: "center", fontWeight: "bold" }}>(On sale)</p>}
                 </li>
             </div>
         </div>

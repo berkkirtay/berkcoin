@@ -20,9 +20,17 @@ cd client && npm run start
 
 ### Token staking: 
 
-![Enc1](https://raw.githubusercontent.com/berkkirtay/berkcoin/main/examples/Capture.PNG)
+![Enc1](https://raw.githubusercontent.com/berkkirtay/berkcoin/main/examples/Staking.PNG)
 
 ### Token Trade: 
 
-![Enc1](https://raw.githubusercontent.com/berkkirtay/berkcoin/main/examples/Capture2.PNG)
+![Enc1](https://raw.githubusercontent.com/berkkirtay/berkcoin/main/examples/Trade.PNG)
+
+### NFT Marketplace: 
+
+![Enc1](https://raw.githubusercontent.com/berkkirtay/berkcoin/main/examples/NFTMarketplace.PNG)
+
+### Collectible Info: 
+
+![Enc1(https://raw.githubusercontent.com/berkkirtay/berkcoin/main/examples/CollectibleInfo.PNG)
 
