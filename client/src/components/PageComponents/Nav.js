@@ -5,10 +5,10 @@ const Nav = () => {
         <div>
             <nav>
                 <ul className="nav">
-                    <li className="nav"><Link to="/wallet">Wallet</Link></li>
-                    <li className="nav"><Link to="/market">Market</Link></li>
-                    <li className="nav"><Link to="/trade">Trade</Link></li>
-                    <li className="nav"><Link to="/staking">Staking</Link></li>
+                    <li className="nav"><Link to="/berkcoin/wallet">Wallet</Link></li>
+                    <li className="nav"><Link to="/berkcoin/market">Market</Link></li>
+                    <li className="nav"><Link to="/berkcoin/trade">Trade</Link></li>
+                    <li className="nav"><Link to="/berkcoin/staking">Staking</Link></li>
                 </ul>
             </nav>
         </div>
