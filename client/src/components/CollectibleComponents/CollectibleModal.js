@@ -65,14 +65,14 @@ export const CollectibleModal = ({ account, collectible, collectibleModalState, 
                                 borderRadius: "4%",
                                 backgroundColor: "#9BB7D4",
                                 width: "28%",
-                                height: "35%",
+                                height: "38%",
                                 margin: "auto"
                             },
                         }
                     }>
 
                     <div >
-                        <button style={{ "float": "right", "marginTop": "1%" }} onClick={() => setModalState(!modalState)}>Close</button>
+                        <button style={{ "float": "right" }} onClick={() => setModalState(!modalState)}>Close</button>
                         <h2>Update Collectible Price:</h2>
                         <form id="newOrder" onSubmit={onSubmit}>
                             <label>Enter a new price (berkcoins): </label>
