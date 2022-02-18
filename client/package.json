@@ -2,7 +2,7 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://berkcoin.github.io",
+  "homepage": "https://berkkirtay.github.io/berkcoin/",
   "dependencies": {
     "gh-pages": "^3.2.3",
     "react": "^17.0.2",
