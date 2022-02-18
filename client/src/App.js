@@ -74,11 +74,12 @@ function App() {
 
   if (web3 === undefined || accounts === undefined || contract === undefined) {
     return (
-      <div>
+      <Router>
         <Header
           account={undefined}
           connect={() => window.location.reload()} />
-      </div>
+        <Nav />
+      </Router>
     );
   }
 

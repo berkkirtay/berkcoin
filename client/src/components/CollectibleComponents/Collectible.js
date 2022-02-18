@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { CollectibleModal } from './CollectibleModal';
 
-const Collectible = ({ account, collectible, onBuy, onSetPrice, fee }) => {
+const Collectible = ({ account, collectible, onBuy, onSetPrice, onBurn, fee }) => {
     const [collectibleModalState, setCollectibleModalState] = useState(false);
 
     const changeModalState = () => {
@@ -16,6 +16,11 @@ const Collectible = ({ account, collectible, onBuy, onSetPrice, fee }) => {
         onSetPrice(collectible.tokenID, newPrice, availability);
     }
 
+    const onBurnRequest = () => {
+        onBurn(collectible.tokenID);
+        changeModalState();
+    }
+
     return (
 
         <div onClick={changeModalState} style={{ display: "flex", justifyContent: "center", margin: "3%", backgroundColor: "#9BB7D4", width: "300px", height: "390px", borderRadius: "4%", float: "left", cursor: "pointer" }}>
@@ -27,6 +32,7 @@ const Collectible = ({ account, collectible, onBuy, onSetPrice, fee }) => {
                     setCollectibleModalState={changeModalState}
                     onBuyRequest={onBuyRequest}
                     onUpdatePrice={onUpdatePrice}
+                    onBurnRequest={onBurnRequest}
                     fee={fee}
                 />
             }

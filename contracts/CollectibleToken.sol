@@ -125,6 +125,18 @@ contract CollectibleToken {
 
     // View Collectible Info
 
+    // The burned collectibles will have an address of 0x0..
+    function getAccessibility(uint256 tokenID) public view returns (bool) {
+        if (
+            collectibles[tokenID].ownerAddress ==
+            address(0x0000000000000000000000000000000000000000)
+        ) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     function getTokenURI(uint256 tokenID) public view returns (string memory) {
         return collectibles[tokenID].tokenURI;
     }

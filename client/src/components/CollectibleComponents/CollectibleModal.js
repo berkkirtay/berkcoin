@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Modal from "react-modal";
 Modal.setAppElement('#root');
 
-export const CollectibleModal = ({ account, collectible, collectibleModalState, setCollectibleModalState, onBuyRequest, onUpdatePrice, fee }) => {
+export const CollectibleModal = ({ account, collectible, collectibleModalState, setCollectibleModalState, onBuyRequest, onUpdatePrice, onBurnRequest, fee }) => {
     const [isOwner, setOwner] = useState(false);
     const [price, setPrice] = useState(collectible.priceOfCollectible);
     const [availability, setAvailability] = useState(false);
@@ -47,7 +47,7 @@ export const CollectibleModal = ({ account, collectible, collectibleModalState, 
                     <p style={{ color: "blue", textAlign: "center", fontWeight: "bold" }}>Created By: {collectible.tokenCreator}</p>
                     <p style={{ color: "blue", textAlign: "center", fontWeight: "bold" }}>Owner: {collectible.tokenOwner} {isOwner && <span>(you)</span>}</p>
                     <p style={{ color: "blue", textAlign: "center", fontWeight: "bold" }}>Collectible Hash: {collectible.collectibleHash}</p>
-                    {isOwner && <button style={{ float: "left", marginTop: "6%" }} onClick={() => setModalState(!modalState)}>Update Price</button>}
+                    {isOwner && <button style={{ float: "left", marginTop: "6%" }} onClick={() => setModalState(!modalState)}>Update Collectible</button>}
                     {!isOwner && collectible.availability === true && <button style={{ float: "left", marginTop: "6%" }} onClick={onBuyRequest}>Buy Collectible</button>}
                     <button style={{ float: "right", marginTop: "6%" }} onClick={setCollectibleModalState}>Close</button>
                 </div>
@@ -72,8 +72,8 @@ export const CollectibleModal = ({ account, collectible, collectibleModalState, 
                     }>
 
                     <div >
-                        <button style={{ "float": "right" }} onClick={() => setModalState(!modalState)}>Close</button>
-                        <h2>Update Collectible Price:</h2>
+                        <button style={{ float: "right" }} onClick={() => setModalState(!modalState)}>Close</button>
+                        <h2>Update Collectible:</h2>
                         <form id="newOrder" onSubmit={onSubmit}>
                             <label>Enter a new price (berkcoins): </label>
                             <input type="number" required
@@ -81,10 +81,11 @@ export const CollectibleModal = ({ account, collectible, collectibleModalState, 
                             <input style={{ float: "right", margin: "0", padding: "0", marginTop: "2%" }} type="checkbox"
                                 value={availability} onChange={(e) => setAvailability(!availability)} />
                             <label style={{ display: "inline" }}>Set available: </label>
-                            <h3 style={{ marginLeft: "10%" }}>Collectible will {!availability && "not"} be listed as available for trade.</h3>
+                            <h3 style={{ textAlign: "center" }}>Collectible will {!availability && "not"} be listed as available for trade.</h3>
                             {price !== 0 && <h3 style={{ color: "red", textAlign: "center" }}>You will pay {fee} berkcoins price update fee.</h3>}
-                            <button style={{ display: "flex", margin: "auto" }}>Update</button>
+                            <button style={{ float: "right", display: "flex", margin: "auto" }}>Update</button>
                         </form>
+                        <button style={{ float: "left", color: "red" }} onClick={onBurnRequest}>Burn Collectible</button>
                     </div>
                 </Modal>
             </Modal>

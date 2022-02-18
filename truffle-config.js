@@ -1,6 +1,6 @@
 const path = require("path");
 const { projectId, mnemonic } = require('./secrets.json');
-const HDWalletProvider = require("@truffle/hdwallet-provider");
+const HDWalletProvider = require("@truffle");
 
 module.exports = {
   // See <http://truffleframework.com/docs/advanced/configuration>

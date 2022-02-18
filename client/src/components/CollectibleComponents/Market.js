@@ -37,6 +37,9 @@ const Market = ({ account, contract }) => {
                 .call({ from: account });
             const tokenOwner = await contract.methods.getTokenOwner(i)
                 .call({ from: account });
+            if (tokenOwner === "0x0000000000000000000000000000000000000000") {
+                continue;
+            }
             const tokenCreator = await contract.methods.getTokenCreator(i)
                 .call({ from: account });
             const tokenDescription = await contract.methods.getTokenDescription(i)
@@ -126,6 +129,13 @@ const Market = ({ account, contract }) => {
         }
     }
 
+    const onBurn = async (tokenID) => {
+        await contract.methods.burnCollectible(tokenID)
+            .send({ from: account });
+        setRefresh(!refresh);
+    }
+
+
     return (
         <div>
             <h1>Berkcoin NFT Marketplace</h1>
@@ -144,6 +154,7 @@ const Market = ({ account, contract }) => {
                         collectible={collectible}
                         onBuy={onBuy}
                         onSetPrice={onSetPrice}
+                        onBurn={onBurn}
                         fee={fee}
                     />
                 ))}
