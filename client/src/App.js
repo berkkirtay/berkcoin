@@ -89,25 +89,25 @@ function App() {
       />
       <Nav />
       <Routes>
-        <Route path='/' element={<Navigate to={"/wallet"} />} />
+        <Route path='/berkcoin/' element={<Navigate to={"/wallet"} />} />
 
-        <Route path='/wallet' element={<Wallet
+        <Route path='/berkcoin/wallet' element={<Wallet
           web3={web3}
           account={accounts[0]}
           balance={balance} />} />
 
-        <Route path='/market' element={<Market
+        <Route path='/berkcoin/market' element={<Market
           account={accounts[0]}
           contract={contract} />} />
 
-        <Route path='/trade' element={<Trade
+        <Route path='/berkcoin/trade' element={<Trade
           account={accounts[0]}
           contract={contract}
           balance={balance}
           ethBalance={ethBalance}
           getBalance={getBalance} />} />
 
-        <Route path='/staking' element={<Staking
+        <Route path='/berkcoin/staking' element={<Staking
           account={accounts[0]}
           contract={contract}
           balance={balance} />} />
