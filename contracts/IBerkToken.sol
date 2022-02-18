@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.0;
 
-interface IToken {
+interface IBerkToken {
     function send(address receiver, uint256 amount) external;
 
     function deposit(uint256 amount) external payable;

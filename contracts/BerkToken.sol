@@ -1,25 +1,25 @@
 // SPDX-License-Identifier: MIT
 
-// For this project, I can merge my previous two smart contracts into one contract
-// or i can use the same layout ( Stakers can provide services in a different node.)
-// So, users can buy (swap) tokens with ETH and stake them via a staker.
-
-// ETH stake provider contract; peers can stake their funds to gain rewards.
+// I implemented a token for this project that allows users
+// trade, stake and transfer operations.
+// I also injected CollectibleToken contract and wrote some wrapped
+// functions to use NFT functionalities with this contract
 
 pragma solidity ^0.8.0;
 
-import "./IToken.sol";
+import "./IBerkToken.sol";
 import "./CollectibleToken.sol";
 
-contract BerkToken is IToken {
+contract BerkToken is IBerkToken {
     mapping(address => uint256) public balances;
     mapping(address => uint256) public accountStakeDates;
     mapping(address => uint256) public accountStakeAmounts;
     mapping(address => uint256) public latestStakeRewards;
 
     // Stake reward rate
-    uint256 private constant interest = 5;
-    uint256 private constant maxSupply = 1000000000;
+    uint256 private constant interest = 2;
+    uint256 private constant minimumTokenValue = 10000000000000;
+    uint256 private constant maxSupply = 10000000000;
 
     CollectibleToken private collectibleToken;
     uint256 public collectibleFee;
@@ -153,6 +153,14 @@ contract BerkToken is IToken {
         latestStakeRewards[publicAddress] = 0;
     }
 
+    function burnTokens(uint256 amountToBeBurned) public {
+        require(
+            balances[msg.sender] >= amountToBeBurned,
+            "You have insufficient funds to burn!"
+        );
+        balances[msg.sender] -= amountToBeBurned;
+    }
+
     function getBalance(address publicAddress) public view returns (uint256) {
         return balances[publicAddress];
     }
@@ -193,8 +201,9 @@ contract BerkToken is IToken {
         // token price will be 0. To prevent multiply error, we
         // assing token price with the lowest possible value 1.
 
-        if (tokenPrice == 0) {
-            tokenPrice = 10000000;
+        // @var tokenPrice: minimum value of token
+        if (tokenPrice < minimumTokenValue) {
+            tokenPrice = minimumTokenValue;
         }
         return tokenPrice;
     }
@@ -208,13 +217,15 @@ contract BerkToken is IToken {
     function registerNewCollectible(
         string memory tokenUri,
         string memory description,
-        uint256 price
+        uint256 price,
+        bool isAvailableToTrade
     ) public {
         collectibleToken.createNewCollectible(
             tokenUri,
             description,
             price,
-            msg.sender
+            msg.sender,
+            isAvailableToTrade
         );
         require(
             balances[msg.sender] >= price / collectibleFee,
@@ -223,22 +234,48 @@ contract BerkToken is IToken {
         balances[msg.sender] -= price / collectibleFee;
     }
 
+    function burnCollectible(uint256 tokenID) public {
+        collectibleToken.burnCollectible(tokenID, msg.sender);
+    }
+
     function setPriceOfCollectible(uint256 tokenID, uint256 price) public {
+        uint256 oldPrice = collectibleToken.getPriceOfCollectible(tokenID);
+        require(
+            balances[msg.sender] >= (price - oldPrice) / collectibleFee,
+            "Sender doesn't have enough funds to pay registration fee!"
+        );
+        balances[msg.sender] -= (price - oldPrice) / collectibleFee;
         collectibleToken.setPriceOfCollectible(msg.sender, tokenID, price);
+    }
+
+    function setAvailabilityOfCollectible(uint256 tokenID, bool availability)
+        public
+    {
+        collectibleToken.setAvailabilityOfCollectible(
+            msg.sender,
+            tokenID,
+            availability
+        );
     }
 
     function buyCollectible(uint256 tokenID) public {
         uint256 price = collectibleToken.getPriceOfCollectible(tokenID);
         require(
-            price <= balances[msg.sender],
+            getAvailabilityOfToken(tokenID) == true,
+            "Token is not available for trade!"
+        );
+        require(
+            price + price / collectibleFee <= balances[msg.sender],
             "Sender doesn't have enough funds!"
         );
 
         address collectibleOwner = collectibleToken.getTokenOwner(tokenID);
         balances[collectibleOwner] += price;
-        balances[msg.sender] -= price;
+        balances[msg.sender] -= price + price / collectibleFee;
         collectibleToken.transferCollectible(msg.sender, tokenID);
     }
+
+    // NFT view functions:
 
     function getTokenURI(uint256 tokenID) public view returns (string memory) {
         return collectibleToken.getTokenURI(tokenID);
@@ -270,6 +307,14 @@ contract BerkToken is IToken {
         returns (uint256)
     {
         return collectibleToken.getPriceOfCollectible(tokenID);
+    }
+
+    function getAvailabilityOfToken(uint256 tokenID)
+        public
+        view
+        returns (bool)
+    {
+        return collectibleToken.getAvailabilityOfToken(tokenID);
     }
 
     function getCollectibleFee() public view returns (uint256) {

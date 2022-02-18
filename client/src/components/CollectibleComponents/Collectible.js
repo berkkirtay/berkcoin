@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { CollectibleModal } from './CollectibleModal';
 
-const Collectible = ({ account, collectible, onBuy, onSetPrice }) => {
+const Collectible = ({ account, collectible, onBuy, onSetPrice, fee }) => {
     const [collectibleModalState, setCollectibleModalState] = useState(false);
 
     const changeModalState = () => {
@@ -12,12 +12,13 @@ const Collectible = ({ account, collectible, onBuy, onSetPrice }) => {
         onBuy(collectible.tokenID);
     }
 
-    const onUpdatePrice = (newPrice) => {
-        onSetPrice(collectible.tokenID, newPrice);
+    const onUpdatePrice = (newPrice, availability) => {
+        onSetPrice(collectible.tokenID, newPrice, availability);
     }
 
     return (
-        <div onClick={changeModalState} style={{ display: "flex", justifyContent: "center", margin: "3%", backgroundColor: "#9BB7D4", width: "300px", borderRadius: "4%", float: "left", cursor: "pointer" }}>
+
+        <div onClick={changeModalState} style={{ display: "flex", justifyContent: "center", margin: "3%", backgroundColor: "#9BB7D4", width: "300px", height: "390px", borderRadius: "4%", float: "left", cursor: "pointer" }}>
             {collectibleModalState === true &&
                 <CollectibleModal
                     account={account}
@@ -26,13 +27,15 @@ const Collectible = ({ account, collectible, onBuy, onSetPrice }) => {
                     setCollectibleModalState={changeModalState}
                     onBuyRequest={onBuyRequest}
                     onUpdatePrice={onUpdatePrice}
+                    fee={fee}
                 />
             }
-            <div style={{ margin: "5px" }}>
+            <div style={{ margin: "15px" }}>
                 <li key={collectible.tokenID}>
                     <img style={{ width: "250px", height: "250px", borderRadius: "10%" }} src={collectible.tokenURI} />
                     <p style={{ color: collectible.priceLevel, textAlign: "center", fontWeight: "bold" }}>{collectible.tokenDescription}</p>
                     <p style={{ color: collectible.priceLevel, textAlign: "center", fontWeight: "bold" }}>{collectible.priceOfCollectible} berkcoins</p>
+                    {collectible.availability === true && <p style={{ color: "blue", textAlign: "center", fontWeight: "bold" }}>(Available to buy)</p>}
                 </li>
             </div>
         </div>

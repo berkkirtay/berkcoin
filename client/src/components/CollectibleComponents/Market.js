@@ -11,7 +11,8 @@ const Market = ({ account, contract }) => {
     const [modalState, setModalState] = useState(false);
     const [collectibles, setCollectibles] = useState(undefined);
     const [refresh, setRefresh] = useState(false);
-    const [sort, setSort] = useState("Sort By Price")
+    const [sort, setSort] = useState("Sort By Price");
+    const [fee, setFee] = useState(0);
 
     const navigate = useNavigate();
     useEffect(() => {
@@ -25,6 +26,9 @@ const Market = ({ account, contract }) => {
 
 
     const getAllNFTs = async () => {
+        const fee = await contract.methods.getCollectibleFee()
+            .call({ from: account });
+        setFee(fee);
         const collectibles = [];
         const tokenCount = await contract.methods.getTokenCount()
             .call({ from: account });
@@ -39,7 +43,9 @@ const Market = ({ account, contract }) => {
                 .call({ from: account });
             const priceOfCollectible = await contract.methods.getPriceOfCollectible(i)
                 .call({ from: account });
-            const collectibleHash = await await contract.methods.getTokenHash(i)
+            const collectibleHash = await contract.methods.getTokenHash(i)
+                .call({ from: account });
+            const availability = await contract.methods.getAvailabilityOfToken(i)
                 .call({ from: account });
 
             // Price level:
@@ -65,7 +71,8 @@ const Market = ({ account, contract }) => {
                 "tokenDescription": tokenDescription,
                 "priceOfCollectible": priceOfCollectible,
                 "collectibleHash": collectibleHash,
-                "priceLevel": priceLevel
+                "priceLevel": priceLevel,
+                "availability": availability
             }
             collectibles.push(Collectible);
         }
@@ -76,8 +83,9 @@ const Market = ({ account, contract }) => {
         setModalState(true);
     }
 
-    const onRegister = async (tokenURI, description, price) => {
-        await contract.methods.registerNewCollectible(tokenURI, description, price)
+    const onRegister = async (tokenURI, description, price, availability) => {
+        console.log(availability)
+        await contract.methods.registerNewCollectible(tokenURI, description, price, availability)
             .send({ from: account });
         setRefresh(!refresh);
     }
@@ -88,9 +96,19 @@ const Market = ({ account, contract }) => {
         setRefresh(!refresh);
     }
 
-    const onSetPrice = async (tokenID, newPrice) => {
-        await contract.methods.setPriceOfCollectible(tokenID, newPrice)
-            .send({ from: account });
+    const onSetPrice = async (tokenID, newPrice, availability) => {
+        const oldPrice = collectibles.find(({ tokenID }) => tokenID === tokenID).priceOfCollectible;
+        if (oldPrice !== newPrice) {
+            await contract.methods.setPriceOfCollectible(tokenID, newPrice)
+                .send({ from: account });
+        }
+
+        const currentAvailabilityStatus = await contract.methods.getAvailabilityOfToken(tokenID)
+            .call({ from: account });
+        if (availability !== currentAvailabilityStatus) {
+            await contract.methods.setAvailabilityOfCollectible(tokenID, availability)
+                .send({ from: account });
+        }
         setRefresh(!refresh);
     }
 
@@ -116,7 +134,9 @@ const Market = ({ account, contract }) => {
             {modalState === true && <RegisterModal
                 modalState={modalState}
                 setModalState={() => setModalState(!modalState)}
-                onRegister={onRegister} />}
+                onRegister={onRegister}
+                fee={fee} />
+            }
             <ul style={{ listStyleType: "none" }}>
                 {collectibles !== undefined && collectibles.slice(0).map((collectible) => (
                     <Collectible
@@ -124,6 +144,7 @@ const Market = ({ account, contract }) => {
                         collectible={collectible}
                         onBuy={onBuy}
                         onSetPrice={onSetPrice}
+                        fee={fee}
                     />
                 ))}
                 {collectibles === undefined &&

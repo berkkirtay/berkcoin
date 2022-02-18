@@ -2,20 +2,21 @@ import React, { useState } from 'react'
 import Modal from "react-modal";
 Modal.setAppElement('#root');
 
-const RegisterModal = ({ modalState, setModalState, onRegister }) => {
+const RegisterModal = ({ modalState, setModalState, onRegister, fee }) => {
     const [tokenURI, setTokenURI] = useState("");
     const [description, setDescription] = useState("");
     const [price, setPrice] = useState(0);
+    const [availability, setAvailability] = useState(false);
 
     const onSubmit = (e) => {
         e.preventDefault();
-        onRegister(tokenURI, description, price);
+        onRegister(tokenURI, description, price, availability);
         setTokenURI("");
         setDescription("");
         setPrice(0);
         setModalState();
-
     }
+
     return (
         <div >
             <Modal isOpen={modalState}
@@ -30,7 +31,7 @@ const RegisterModal = ({ modalState, setModalState, onRegister }) => {
                         },
                         content: {
                             borderRadius: "4%",
-                            backgroundColor: "snow",
+                            backgroundColor: "#9BB7D4",
                             width: "35%",
                             height: "60%",
                             margin: "auto"
@@ -49,8 +50,14 @@ const RegisterModal = ({ modalState, setModalState, onRegister }) => {
                     <label>Collectible Price (berkcoins): </label>
                     <input type="number" required
                         value={price} onChange={(e) => setPrice(e.target.value)} />
-                    {price !== 0 && <h3 style={{ color: "red", textAlign: "center" }}>You will pay {price / 1000} berkcoins registration fee.</h3>}
-                    <button style={{ display: "flex", margin: "auto" }}>Register</button>
+
+
+                    <input style={{ float: "right", margin: "0", padding: "0", marginTop: "2%" }} type="checkbox"
+                        value={availability} onChange={(e) => setAvailability(!availability)} />
+                    <label style={{ display: "inline" }}>Set available: </label>
+                    <h3 style={{ marginLeft: "10%" }}>Collectible will {!availability && "not"} be listed as available for trade.</h3>
+                    {price !== 0 && <h3 style={{ color: "red", textAlign: "center" }}>You will pay {price / fee} berkcoins registration fee.</h3>}
+                    <button style={{ display: "flex", margin: "auto", marginTop: "5%" }}>Register</button>
                 </form>
             </Modal>
         </div>
