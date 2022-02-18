@@ -1,21 +1,21 @@
 {
   "files": {
-    "main.css": "/static/css/main.252eff83.chunk.css",
-    "main.js": "/static/js/main.ccf881c0.chunk.js",
-    "main.js.map": "/static/js/main.ccf881c0.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.b240f91f.js",
-    "runtime-main.js.map": "/static/js/runtime-main.b240f91f.js.map",
-    "static/js/2.7a897a48.chunk.js": "/static/js/2.7a897a48.chunk.js",
-    "static/js/2.7a897a48.chunk.js.map": "/static/js/2.7a897a48.chunk.js.map",
-    "index.html": "/index.html",
-    "precache-manifest.70c0508b5e1019756bb039c9cf7112fa.js": "/precache-manifest.70c0508b5e1019756bb039c9cf7112fa.js",
-    "service-worker.js": "/service-worker.js",
-    "static/css/main.252eff83.chunk.css.map": "/static/css/main.252eff83.chunk.css.map"
+    "main.css": "/berkcoin/static/css/main.252eff83.chunk.css",
+    "main.js": "/berkcoin/static/js/main.a2cb971d.chunk.js",
+    "main.js.map": "/berkcoin/static/js/main.a2cb971d.chunk.js.map",
+    "runtime-main.js": "/berkcoin/static/js/runtime-main.7506f390.js",
+    "runtime-main.js.map": "/berkcoin/static/js/runtime-main.7506f390.js.map",
+    "static/js/2.c74b5127.chunk.js": "/berkcoin/static/js/2.c74b5127.chunk.js",
+    "static/js/2.c74b5127.chunk.js.map": "/berkcoin/static/js/2.c74b5127.chunk.js.map",
+    "index.html": "/berkcoin/index.html",
+    "precache-manifest.764064f5b0fd9cce99b7f5add73ba87d.js": "/berkcoin/precache-manifest.764064f5b0fd9cce99b7f5add73ba87d.js",
+    "service-worker.js": "/berkcoin/service-worker.js",
+    "static/css/main.252eff83.chunk.css.map": "/berkcoin/static/css/main.252eff83.chunk.css.map"
   },
   "entrypoints": [
-    "static/js/runtime-main.b240f91f.js",
-    "static/js/2.7a897a48.chunk.js",
+    "static/js/runtime-main.7506f390.js",
+    "static/js/2.c74b5127.chunk.js",
     "static/css/main.252eff83.chunk.css",
-    "static/js/main.ccf881c0.chunk.js"
+    "static/js/main.a2cb971d.chunk.js"
   ]
 }
