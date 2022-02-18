@@ -1,4 +1,5 @@
 ## Berkcoin dApp project with Truffle 
+#### Website is deployed on rapsten testnet at: [berkkirtay.github.io/berkcoin](https://berkkirtay.github.io/berkcoin)
 
 ### Basic usage:
 Any network can be used via getWeb3 function.
