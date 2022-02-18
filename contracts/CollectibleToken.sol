@@ -7,6 +7,7 @@ pragma solidity ^0.8.0;
 contract CollectibleToken {
     struct Collectible {
         string tokenURI;
+        address creator;
         address ownerAddress;
         bytes32 collectibleHash;
         string collectibleDescription;
@@ -23,6 +24,7 @@ contract CollectibleToken {
     //ERC721("berkcoin", "BERK")
     constructor() {
         tokenCounter = 1;
+        transactionFee = 10000;
     }
 
     function createNewCollectible(
@@ -41,6 +43,7 @@ contract CollectibleToken {
         );
         collectibles[tokenCounter] = Collectible(
             tokenURI,
+            owner,
             owner,
             computedHash,
             description,
@@ -78,9 +81,13 @@ contract CollectibleToken {
         emit CollectibleTransfer(oldOwner, to, tokenID);
     }
 
-    function setPriceOfCollectible(uint256 tokenID, uint256 price) public {
+    function setPriceOfCollectible(
+        address owner,
+        uint256 tokenID,
+        uint256 price
+    ) public {
         require(
-            collectibleOwners[tokenID] == msg.sender,
+            collectibleOwners[tokenID] == owner,
             "Sender doesn't own the collectible!"
         );
         collectibles[tokenID].lastTokenPrice = price;
@@ -92,6 +99,10 @@ contract CollectibleToken {
 
     function getTokenURI(uint256 tokenID) public view returns (string memory) {
         return collectibles[tokenID].tokenURI;
+    }
+
+    function getTokenCreator(uint256 tokenID) public view returns (address) {
+        return collectibles[tokenID].creator;
     }
 
     function getTokenOwner(uint256 tokenID) public view returns (address) {
@@ -120,6 +131,10 @@ contract CollectibleToken {
 
     function getTokenCount() public view returns (uint256) {
         return tokenCounter - 1;
+    }
+
+    function getTransactionFee() public view returns (uint256) {
+        return transactionFee;
     }
 
     event NewCollectible(address from, uint256 tokendID);

@@ -19,15 +19,14 @@ contract BerkToken is IToken {
 
     // Stake reward rate
     uint256 private constant interest = 5;
-
     uint256 private constant maxSupply = 1000000000;
 
     CollectibleToken private collectibleToken;
-
-    mapping(uint256 => bool) public onSaleCollectibles;
+    uint256 public collectibleFee;
 
     constructor() {
         collectibleToken = new CollectibleToken();
+        collectibleFee = collectibleToken.getTransactionFee();
     }
 
     /*
@@ -195,7 +194,7 @@ contract BerkToken is IToken {
         // assing token price with the lowest possible value 1.
 
         if (tokenPrice == 0) {
-            tokenPrice = 100000;
+            tokenPrice = 10000000;
         }
         return tokenPrice;
     }
@@ -218,14 +217,14 @@ contract BerkToken is IToken {
             msg.sender
         );
         require(
-            balances[msg.sender] >= price / 1000,
+            balances[msg.sender] >= price / collectibleFee,
             "Sender doesn't have enough funds to pay registration fee!"
         );
-        balances[msg.sender] -= price / 1000;
+        balances[msg.sender] -= price / collectibleFee;
     }
 
     function setPriceOfCollectible(uint256 tokenID, uint256 price) public {
-        collectibleToken.setPriceOfCollectible(tokenID, price);
+        collectibleToken.setPriceOfCollectible(msg.sender, tokenID, price);
     }
 
     function buyCollectible(uint256 tokenID) public {
@@ -234,16 +233,19 @@ contract BerkToken is IToken {
             price <= balances[msg.sender],
             "Sender doesn't have enough funds!"
         );
+
+        address collectibleOwner = collectibleToken.getTokenOwner(tokenID);
+        balances[collectibleOwner] += price;
         balances[msg.sender] -= price;
         collectibleToken.transferCollectible(msg.sender, tokenID);
     }
 
-    function sellCollectible(uint256 tokenID) public {
-        onSaleCollectibles[tokenID] = true;
-    }
-
     function getTokenURI(uint256 tokenID) public view returns (string memory) {
         return collectibleToken.getTokenURI(tokenID);
+    }
+
+    function getTokenCreator(uint256 tokenID) public view returns (address) {
+        return collectibleToken.getTokenCreator(tokenID);
     }
 
     function getTokenOwner(uint256 tokenID) public view returns (address) {
@@ -268,6 +270,10 @@ contract BerkToken is IToken {
         returns (uint256)
     {
         return collectibleToken.getPriceOfCollectible(tokenID);
+    }
+
+    function getCollectibleFee() public view returns (uint256) {
+        return collectibleFee;
     }
 
     function getTokenCount() public view returns (uint256) {

@@ -1,11 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { CollectibleModal } from './CollectibleModal';
 
-const Collectible = ({ account, collectible }) => {
+const Collectible = ({ account, collectible, onBuy, onSetPrice }) => {
     const [collectibleModalState, setCollectibleModalState] = useState(false);
 
     const changeModalState = () => {
         setCollectibleModalState(!collectibleModalState);
+    }
+
+    const onBuyRequest = () => {
+        onBuy(collectible.tokenID);
+    }
+
+    const onUpdatePrice = (newPrice) => {
+        onSetPrice(collectible.tokenID, newPrice);
     }
 
     return (
@@ -16,6 +24,8 @@ const Collectible = ({ account, collectible }) => {
                     collectible={collectible}
                     collectibleModalState={collectibleModalState}
                     setCollectibleModalState={changeModalState}
+                    onBuyRequest={onBuyRequest}
+                    onUpdatePrice={onUpdatePrice}
                 />
             }
             <div style={{ margin: "5px" }}>

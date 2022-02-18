@@ -16,6 +16,7 @@ const Market = ({ account, contract }) => {
     const navigate = useNavigate();
     useEffect(() => {
         getAllNFTs();
+        navigate("/market");
     }, [refresh])
 
     useEffect(() => {
@@ -31,6 +32,8 @@ const Market = ({ account, contract }) => {
             const tokenURI = await contract.methods.getTokenURI(i)
                 .call({ from: account });
             const tokenOwner = await contract.methods.getTokenOwner(i)
+                .call({ from: account });
+            const tokenCreator = await contract.methods.getTokenCreator(i)
                 .call({ from: account });
             const tokenDescription = await contract.methods.getTokenDescription(i)
                 .call({ from: account });
@@ -57,6 +60,7 @@ const Market = ({ account, contract }) => {
             const Collectible = {
                 "tokenID": i,
                 "tokenURI": tokenURI,
+                "tokenCreator": tokenCreator,
                 "tokenOwner": tokenOwner,
                 "tokenDescription": tokenDescription,
                 "priceOfCollectible": priceOfCollectible,
@@ -78,16 +82,16 @@ const Market = ({ account, contract }) => {
         setRefresh(!refresh);
     }
 
-    const onBuy = async () => {
-
+    const onBuy = async (tokenID) => {
+        await contract.methods.buyCollectible(tokenID)
+            .send({ from: account });
+        setRefresh(!refresh);
     }
 
-    const onSell = async () => {
-
-    }
-
-    const onSetPrice = async () => {
-
+    const onSetPrice = async (tokenID, newPrice) => {
+        await contract.methods.setPriceOfCollectible(tokenID, newPrice)
+            .send({ from: account });
+        setRefresh(!refresh);
     }
 
     const onSort = () => {
@@ -118,6 +122,8 @@ const Market = ({ account, contract }) => {
                     <Collectible
                         account={account}
                         collectible={collectible}
+                        onBuy={onBuy}
+                        onSetPrice={onSetPrice}
                     />
                 ))}
                 {collectibles === undefined &&
