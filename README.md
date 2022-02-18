@@ -32,5 +32,5 @@ cd client && npm run start
 
 ### Collectible Info: 
 
-![Enc1(https://raw.githubusercontent.com/berkkirtay/berkcoin/main/examples/CollectibleInfo.PNG)
+![Enc1](https://raw.githubusercontent.com/berkkirtay/berkcoin/main/examples/CollectibleInfo.PNG)
 
