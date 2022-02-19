@@ -37,10 +37,10 @@ const Collectible = ({ account, collectible, onBuy, onSetPrice, onBurn, fee }) =
                     fee={fee}
                 />
             }
-            <div style={{ margin: "15px" }}>
+            <div style={{ margin: "10px" }}>
                 <li key={collectible.tokenID}>
                     <div style={{ backgroundColor: collectible.priceLevel, borderRadius: "4%" }}>
-                        <img style={{ width: "250px", height: "250px", borderRadius: "10%" }} src={collectible.tokenURI} />
+                        <img style={{ width: "250px", height: "250px", borderRadius: "10%", padding: "5px" }} src={collectible.tokenURI} />
                     </div>
                     <p style={{ color: collectible.priceLevel, textAlign: "center", fontWeight: "bold" }}>{collectible.tokenDescription}</p>
                     <p style={{ color: collectible.priceLevel, textAlign: "center", fontWeight: "bold" }}>{collectible.priceOfCollectible} berkcoins</p>

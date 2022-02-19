@@ -38,6 +38,7 @@ const Market = ({ account, contract }) => {
             if (accessibility === false) {
                 continue;
             }
+            console.log(accessibility)
             const tokenURI = await contract.methods.getTokenURI(i)
                 .call({ from: account });
             const tokenOwner = await contract.methods.getTokenOwner(i)

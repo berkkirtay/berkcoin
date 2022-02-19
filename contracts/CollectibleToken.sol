@@ -23,6 +23,7 @@ contract CollectibleToken {
     mapping(uint256 => address) public collectibleOwners;
     mapping(string => uint256) public collectibleURIs;
     mapping(uint256 => bool) public availableToTradeCollectibles;
+    mapping(uint256 => bool) public burnedCollectibles;
 
     //ERC721("berkcoin", "BERK")
     constructor() {
@@ -93,6 +94,7 @@ contract CollectibleToken {
         );
         collectibleURIs[collectibles[tokenID].tokenURI] = 0;
         collectibleOwners[tokenID] = address(0);
+        burnedCollectibles[tokenID] = true;
     }
 
     function setPriceOfCollectible(
@@ -127,14 +129,7 @@ contract CollectibleToken {
 
     // The burned collectibles will have an address of 0x0..
     function getAccessibility(uint256 tokenID) public view returns (bool) {
-        if (
-            collectibles[tokenID].ownerAddress ==
-            address(0x0000000000000000000000000000000000000000)
-        ) {
-            return false;
-        } else {
-            return true;
-        }
+        return !burnedCollectibles[tokenID];
     }
 
     function getTokenURI(uint256 tokenID) public view returns (string memory) {
