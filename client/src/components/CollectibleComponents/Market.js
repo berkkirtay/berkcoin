@@ -33,13 +33,15 @@ const Market = ({ account, contract }) => {
         const tokenCount = await contract.methods.getTokenCount()
             .call({ from: account });
         for (var i = 1; i <= tokenCount; i++) {
+            const accessibility = await contract.methods.getAccessibility(i)
+                .call({ from: account });
+            if (accessibility === false) {
+                continue;
+            }
             const tokenURI = await contract.methods.getTokenURI(i)
                 .call({ from: account });
             const tokenOwner = await contract.methods.getTokenOwner(i)
                 .call({ from: account });
-            if (tokenOwner === "0x0000000000000000000000000000000000000000") {
-                continue;
-            }
             const tokenCreator = await contract.methods.getTokenCreator(i)
                 .call({ from: account });
             const tokenDescription = await contract.methods.getTokenDescription(i)
@@ -57,7 +59,7 @@ const Market = ({ account, contract }) => {
                 priceLevel = "darkviolet";
             }
             else if (priceOfCollectible >= 100000) {
-                priceLevel = "#FF7102";
+                priceLevel = "#ff5202";
             }
             else if (priceOfCollectible >= 50000) {
                 priceLevel = "red";

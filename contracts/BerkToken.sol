@@ -17,7 +17,7 @@ contract BerkToken is IBerkToken {
     mapping(address => uint256) public latestStakeRewards;
 
     // Stake reward rate
-    uint256 private constant interest = 2;
+    uint256 private constant interest = 3;
     uint256 private constant minimumTokenValue = 10000000000000;
     uint256 private constant maxSupply = 10000000000;
 
@@ -93,7 +93,7 @@ contract BerkToken is IBerkToken {
         if (amountToBeStaked > 100) {
             stakeRate = stakeRate * 2;
         }
-        return stakeRate / 10000;
+        return stakeRate / 100000;
     }
 
     function deposit(uint256 amount) public payable {
@@ -323,6 +323,10 @@ contract BerkToken is IBerkToken {
 
     function getTokenCount() public view returns (uint256) {
         return collectibleToken.getTokenCount();
+    }
+
+    function getAccessibility(uint256 tokenID) public view returns (bool) {
+        return collectibleToken.getAccessibility(tokenID);
     }
 
     event Sent(address from, address to, uint256 amount);

@@ -41,7 +41,9 @@ export const CollectibleModal = ({ account, collectible, collectibleModalState, 
                     }
                 }>
                 <div>
-                    <img style={{ width: "250px", height: "250px", borderRadius: "10%", display: "flex", margin: "0 auto" }} src={collectible.tokenURI} />
+                    <div style={{ backgroundColor: collectible.priceLevel, borderRadius: "4%", width: "40%", display: "flex", margin: "0 auto" }}>
+                        <img style={{ width: "250px", height: "250px", borderRadius: "10%", display: "flex", margin: "0 auto" }} src={collectible.tokenURI} />
+                    </div>
                     <p style={{ color: collectible.priceLevel, textAlign: "center", fontWeight: "bold" }}>{collectible.tokenDescription}</p>
                     <p style={{ color: collectible.priceLevel, textAlign: "center", fontWeight: "bold" }}>{collectible.priceOfCollectible} berkcoins</p>
                     <p style={{ color: "blue", textAlign: "center", fontWeight: "bold" }}>Created By: {collectible.tokenCreator}</p>
