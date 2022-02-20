@@ -84,7 +84,7 @@ const Staking = ({ account, contract, balance }) => {
         if (depositAmount > 100) {
             stakeRate = stakeRate * 2;
         }
-        setCalculatedStakeReward(stakeRate / 10000);
+        setCalculatedStakeReward(depositAmount * stakeRate / 1000000000);
     }
 
     const checkStakeStatus = async () => {

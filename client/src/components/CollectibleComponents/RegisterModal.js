@@ -56,7 +56,7 @@ const RegisterModal = ({ modalState, setModalState, onRegister, fee }) => {
                         value={availability} onChange={(e) => setAvailability(!availability)} />
                     <label style={{ display: "inline" }}>Set available: </label>
                     <h3 style={{ marginLeft: "10%" }}>Collectible will {!availability && "not"} be listed as available for trade.</h3>
-                    {price !== 0 && <h3 style={{ color: "red", textAlign: "center" }}>You will pay {price / fee} berkcoins registration fee.</h3>}
+                    {price !== 0 && <h3 style={{ color: "red", textAlign: "center" }}>You will pay {fee} berkcoins registration fee.</h3>}
                     <button style={{ display: "flex", margin: "auto", marginTop: "5%" }}>Register</button>
                 </form>
             </Modal>

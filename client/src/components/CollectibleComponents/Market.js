@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import React from 'react';
-import { BallTriangle } from 'react-loader-spinner'
+import LoadingTriangle from "../PageComponents/LoadingTriangle";
 import { useNavigate } from "react-router-dom";
 
 import Collectible from "./Collectible";
@@ -29,16 +29,18 @@ const Market = ({ account, contract }) => {
         const fee = await contract.methods.getCollectibleFee()
             .call({ from: account });
         setFee(fee);
+
         const collectibles = [];
+
         const tokenCount = await contract.methods.getTokenCount()
             .call({ from: account });
+
         for (var i = 1; i <= tokenCount; i++) {
             const accessibility = await contract.methods.getAccessibility(i)
                 .call({ from: account });
             if (accessibility === false) {
                 continue;
             }
-            console.log(accessibility)
             const tokenURI = await contract.methods.getTokenURI(i)
                 .call({ from: account });
             const tokenOwner = await contract.methods.getTokenOwner(i)
@@ -90,7 +92,6 @@ const Market = ({ account, contract }) => {
     }
 
     const onRegister = async (tokenURI, description, price, availability) => {
-        console.log(availability)
         await contract.methods.registerNewCollectible(tokenURI, description, price, availability)
             .send({ from: account });
         setRefresh(!refresh);
@@ -162,9 +163,7 @@ const Market = ({ account, contract }) => {
                     />
                 ))}
                 {collectibles === undefined &&
-                    <div style={{ display: "flex", justifyContent: "center" }}>
-                        <BallTriangle color="#00BFFF" height={200} width={200} />
-                    </div>
+                    <LoadingTriangle />
                 }
             </ul>
         </div>

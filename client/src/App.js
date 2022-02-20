@@ -1,9 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate, Navigate } from "react-router-dom"
 import { useState, useEffect } from "react"
+import { BallTriangle } from 'react-loader-spinner'
 
 import getWeb3 from "./services/getWeb3";
-
 import BerkToken from "./contracts/BerkToken";
 
 
@@ -13,6 +13,7 @@ import Market from "./components/CollectibleComponents/Market";
 import Trade from "./components/TokenComponents/Trade";
 import Staking from "./components/TokenComponents/Staking";
 import { Header } from './components/PageComponents/Header';
+import LoadingTriangle from './components/PageComponents/LoadingTriangle';
 
 function App() {
   // Rewriting truffle generated code for react hooks:
@@ -79,6 +80,8 @@ function App() {
           account={undefined}
           connect={() => window.location.reload()} />
         <Nav />
+        <h2 style={{ textAlign: "center" }}>Waiting for wallet connection...</h2>
+        <LoadingTriangle />
       </Router>
     );
   }

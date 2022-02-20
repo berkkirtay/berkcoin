@@ -17,7 +17,7 @@ contract BerkToken is IBerkToken {
     mapping(address => uint256) public latestStakeRewards;
 
     // Stake reward rate
-    uint256 private constant interest = 3;
+    uint256 private constant interest = 2;
     uint256 private constant minimumTokenValue = 10000000000000;
     uint256 private constant maxSupply = 10000000000;
 
@@ -93,7 +93,7 @@ contract BerkToken is IBerkToken {
         if (amountToBeStaked > 100) {
             stakeRate = stakeRate * 2;
         }
-        return stakeRate / 100000;
+        return (amountToBeStaked * stakeRate) / 1000000000;
     }
 
     function deposit(uint256 amount) public payable {
@@ -228,10 +228,10 @@ contract BerkToken is IBerkToken {
             isAvailableToTrade
         );
         require(
-            balances[msg.sender] >= price / collectibleFee,
+            balances[msg.sender] >= collectibleFee,
             "Sender doesn't have enough funds to pay registration fee!"
         );
-        balances[msg.sender] -= price / collectibleFee;
+        balances[msg.sender] -= collectibleFee;
     }
 
     function burnCollectible(uint256 tokenID) public {
@@ -239,12 +239,11 @@ contract BerkToken is IBerkToken {
     }
 
     function setPriceOfCollectible(uint256 tokenID, uint256 price) public {
-        uint256 oldPrice = collectibleToken.getPriceOfCollectible(tokenID);
         require(
-            balances[msg.sender] >= (price - oldPrice) / collectibleFee,
+            balances[msg.sender] >= collectibleFee / 10,
             "Sender doesn't have enough funds to pay registration fee!"
         );
-        balances[msg.sender] -= (price - oldPrice) / collectibleFee;
+        balances[msg.sender] -= collectibleFee / 10;
         collectibleToken.setPriceOfCollectible(msg.sender, tokenID, price);
     }
 

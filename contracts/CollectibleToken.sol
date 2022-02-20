@@ -28,7 +28,7 @@ contract CollectibleToken {
     //ERC721("berkcoin", "BERK")
     constructor() {
         tokenCounter = 1;
-        transactionFee = 10000;
+        transactionFee = 100000;
     }
 
     function createNewCollectible(

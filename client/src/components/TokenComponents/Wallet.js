@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import LoadingTriangle from '../PageComponents/LoadingTriangle';
 
 const Wallet = ({ web3, account, balance }) => {
     const [transactions, setTransactions] = useState(undefined);
@@ -23,6 +24,9 @@ const Wallet = ({ web3, account, balance }) => {
             <h3>Wallet Public Address: {account}</h3>
             <h3>Wallet Balance: {balance}</h3>
             <h3>Your Latest Transactions:</h3>
+            {transactions === undefined &&
+                <LoadingTriangle />
+            }
             <ul style={{ listStyleType: "none" }}>
                 {transactions != undefined && transactions.slice(0).map((transaction) => (
                     <li key={transaction.hash} style={{ width: "80%", border: "1px solid black", display: "inline-block", boxSizing: "border-box" }}>

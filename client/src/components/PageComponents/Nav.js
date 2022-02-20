@@ -10,7 +10,9 @@ const Nav = () => {
                     <li className="nav"><Link to="/berkcoin/trade">Trade</Link></li>
                     <li className="nav"><Link to="/berkcoin/staking">Staking</Link></li>
                 </ul>
+
             </nav>
+
         </div>
     )
 }
