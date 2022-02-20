@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/berkcoin/precache-manifest.d5416befa6218259feb6edc0efdea079.js"
+  "/berkcoin/precache-manifest.073fccda7c0c6c556433b6505a00c520.js"
 );
 
 self.addEventListener('message', (event) => {
