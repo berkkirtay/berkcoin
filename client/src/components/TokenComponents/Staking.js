@@ -54,7 +54,7 @@ const Staking = ({ account, contract, balance }) => {
         const response = await contract.methods.getStakeCompletionDate(account)
             .call({ from: account });
 
-        if (response == 0) {
+        if (response === 0) {
             setStakedDuration("NaN");
             return;
         }

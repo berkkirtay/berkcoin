@@ -1,7 +1,6 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, useNavigate, Navigate } from "react-router-dom"
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom"
 import { useState, useEffect } from "react"
-import { BallTriangle } from 'react-loader-spinner'
 
 import getWeb3 from "./services/getWeb3";
 import BerkToken from "./contracts/BerkToken";

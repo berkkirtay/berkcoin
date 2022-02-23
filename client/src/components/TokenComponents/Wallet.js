@@ -28,7 +28,7 @@ const Wallet = ({ web3, account, balance }) => {
                 <LoadingTriangle />
             }
             <ul style={{ listStyleType: "none" }}>
-                {transactions != undefined && transactions.slice(0).map((transaction) => (
+                {transactions !== undefined && transactions.slice(0).map((transaction) => (
                     <li key={transaction.hash} style={{ width: "80%", border: "1px solid black", display: "inline-block", boxSizing: "border-box" }}>
                         <p><span style={{ marginLeft: "3%" }}>Hash: {transaction.hash}</span><span style={{ float: "right", color: "green", marginRight: "3%" }}>Value: {transaction.value / (10 ** 18)}</span></p>
                     </li>

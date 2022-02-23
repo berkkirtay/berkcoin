@@ -14,7 +14,7 @@ const Trade = ({ account, contract, balance, ethBalance, getBalance }) => {
         const fetchCurrentTokenPrice = async () => {
             const response = await contract.methods.getTokenPrice()
                 .call({ from: account });
-            setDepositPrice(response / 10 ** 18);
+            setDepositPrice(response);
             setWithdrawPrice(response / 10 ** 18);
         }
 
@@ -23,7 +23,7 @@ const Trade = ({ account, contract, balance, ethBalance, getBalance }) => {
 
     const deposit = async () => {
         await contract.methods.deposit(depositAmount)
-            .send({ from: account, value: (depositAmount * depositPrice * 10 ** 14).toString(10) + "0000" });
+            .send({ from: account, value: (depositAmount * depositPrice) });
         getBalance();
     };
 
@@ -56,8 +56,8 @@ const Trade = ({ account, contract, balance, ethBalance, getBalance }) => {
                         value={depositAmount} onChange={(e) => setDepositAmount(e.target.value)} />
                     <label>Current Price: </label>
                     <input type="number" required
-                        value={depositPrice} onChange={(e) => setDepositPrice(e.target.value)} />
-                    {depositAmount !== 0 && <h3 style={{ color: "green", textAlign: "center" }}>You will pay {depositAmount * depositPrice} ETH</h3>}
+                        value={depositPrice / 10 ** 18} onChange={(e) => setDepositPrice(e.target.value * 10 ** 18)} />
+                    {depositAmount !== 0 && <h3 style={{ color: "green", textAlign: "center" }}>You will pay {depositAmount * depositPrice / 10 ** 18} ETH</h3>}
                     <button style={{ display: "inline-block", marginLeft: "39%" }}>Buy berkcoin</button>
                 </form>
             </div>
