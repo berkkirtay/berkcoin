@@ -1,5 +1,13 @@
 const path = require("path");
-const { projectId, mnemonic } = require('./secrets.json');
+try {
+  let { projectId, mnemonic } = require('./secrets.json');
+}
+catch (err) {
+  projectId = 0;
+  mnemonic = "null";
+  console.log(err);
+}
+
 const HDWalletProvider = require("@truffle/hdwallet-provider");
 
 module.exports = {
