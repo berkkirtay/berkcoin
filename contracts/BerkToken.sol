@@ -264,13 +264,13 @@ contract BerkToken is IBerkToken {
             "Token is not available for trade!"
         );
         require(
-            price + price / collectibleFee <= balances[msg.sender],
+            price <= balances[msg.sender],
             "Sender doesn't have enough funds!"
         );
 
         address collectibleOwner = collectibleToken.getTokenOwner(tokenID);
         balances[collectibleOwner] += price;
-        balances[msg.sender] -= price + price / collectibleFee;
+        balances[msg.sender] -= price;
         collectibleToken.transferCollectible(msg.sender, tokenID);
     }
 

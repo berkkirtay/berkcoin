@@ -6,6 +6,7 @@ module.exports = {
       port: 7545
     }
   },
+  plugins: ["solidity-coverage"],
 
   compilers: {
     solc: {
