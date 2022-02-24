@@ -20,4 +20,5 @@ jobs:
       - name: Install dependencies
         run: |
           npm install -g truffle
+          npm install truffle-assertions
       - run: truffle test
