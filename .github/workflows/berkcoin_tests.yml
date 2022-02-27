@@ -21,4 +21,5 @@ jobs:
         run: |
           npm install -g truffle
           npm install truffle-assertions
+          npm install @openzeppelin/contracts
       - run: truffle test
