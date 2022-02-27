@@ -5,6 +5,7 @@ Modal.setAppElement('#root');
 export const CollectibleModal = ({ account, collectible, collectibleModalState, setCollectibleModalState, onBuyRequest, onUpdatePrice, onBurnRequest, fee }) => {
     const [isOwner, setOwner] = useState(false);
     const [price, setPrice] = useState(collectible.priceOfCollectible);
+    const [priceChange, setPriceChange] = useState(false);
     const [availability, setAvailability] = useState(false);
     const [modalState, setModalState] = useState(false);
 
@@ -13,6 +14,15 @@ export const CollectibleModal = ({ account, collectible, collectibleModalState, 
             setOwner(true);
         }
     }, []);
+
+    useEffect(() => {
+        if (collectible.priceOfCollectible !== price) {
+            setPriceChange(true);
+        }
+        else {
+            setPriceChange(false);
+        }
+    }, [price])
 
     const onSubmit = (e) => {
         e.preventDefault();
@@ -84,7 +94,7 @@ export const CollectibleModal = ({ account, collectible, collectibleModalState, 
                                 value={availability} onChange={(e) => setAvailability(!availability)} />
                             <label style={{ display: "inline" }}>Set available: </label>
                             <h3 style={{ textAlign: "center" }}>Collectible will {!availability && "not"} be listed as available for trade.</h3>
-                            {price !== 0 && <h3 style={{ color: "red", textAlign: "center" }}>You will pay {fee} berkcoins price update fee.</h3>}
+                            {priceChange === true && <h3 style={{ color: "red", textAlign: "center" }}>You will pay {fee} berkcoins price update fee.</h3>}
                             <button style={{ float: "right", display: "flex", margin: "auto" }}>Update</button>
                         </form>
                         <button style={{ float: "left", color: "red" }} onClick={onBurnRequest}>Burn Collectible</button>

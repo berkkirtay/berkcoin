@@ -7,11 +7,14 @@
 
 pragma solidity ^0.8.0;
 
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "./IBerkToken.sol";
 import "./CollectibleToken.sol";
 
-contract BerkToken is IBerkToken {
-    mapping(address => uint256) public balances;
+contract BerkToken is IBerkToken, ERC20 {
+    address public owner;
+
+    //mapping(address => uint256) public _balances;
     mapping(address => uint256) public accountStakeDates;
     mapping(address => uint256) public accountStakeAmounts;
     mapping(address => uint256) public latestStakeRewards;
@@ -19,14 +22,30 @@ contract BerkToken is IBerkToken {
     // Stake reward rate
     uint256 private constant interest = 2;
     uint256 private constant minimumTokenValue = 10000000000000;
-    uint256 private constant maxSupply = 10000000000;
+    uint256 private maxSupply = 1000000000000;
 
     CollectibleToken private collectibleToken;
     uint256 public collectibleFee;
 
-    constructor() {
+    constructor() ERC20("berkcoin", "berk") {
+        owner = msg.sender;
         collectibleToken = new CollectibleToken();
         collectibleFee = collectibleToken.getTransactionFee();
+        // Minting initial tokens
+        _mint(msg.sender, maxSupply);
+    }
+
+    function mint(address account, uint256 amount) external {
+        require(
+            msg.sender == owner,
+            "Only contract owner can mint new tokens!"
+        );
+        _mint(account, amount);
+        maxSupply += amount;
+    }
+
+    function burnTokens(uint256 amount) external {
+        _burn(msg.sender, amount);
     }
 
     /*
@@ -35,22 +54,50 @@ contract BerkToken is IBerkToken {
      * to:  0xd2d656253b91c5915cafdcd8b3a5249950739e10 : receiver
      */
 
-    function send(address receiver, uint256 amount) public {
-        require(
-            balances[msg.sender] >= amount,
-            "You don't have enough funds to send!"
-        );
-
-        balances[msg.sender] -= amount;
-        balances[receiver] += amount;
-
+    function send(address receiver, uint256 amount) external {
+        _transfer(msg.sender, receiver, amount);
         emit Sent(msg.sender, receiver, amount);
     }
 
-    // duration -> seconds
-    function stake(uint256 duration, uint256 amountToBeStaked) public {
+    function deposit(uint256 amount) external payable {
+        require(msg.value >= 1, "Deposit amount must be at least 1 berkcoin!");
+
+        uint256 tokenPrice = getTokenPrice();
+
+        // Here we get token amount based on the deposited ETH amount:
+        // If user deposit 1 ETH and current token price is 0.2 ETH, then
+        // user will have 5 tokens in his account address.
+        // In this case, user must deposit at least 1 ETH.
+        // If user deposits more than 1 ETH, contract will not
+        // compansate the additional number of ETH.
+
         require(
-            balances[msg.sender] >= amountToBeStaked,
+            msg.value >= amount * tokenPrice,
+            "Deposit amount worth must be at least 1 berkcoin!"
+        );
+
+        _transfer(owner, msg.sender, amount);
+        emit Deposit(msg.sender, msg.value);
+    }
+
+    function withdraw(uint256 amount) external {
+        require(
+            balanceOf(msg.sender) >= amount,
+            "You don't have enough funds in your bank account!"
+        );
+
+        uint256 tokenPrice = getTokenPrice();
+
+        payable(msg.sender).transfer(amount * tokenPrice);
+        _transfer(msg.sender, owner, amount);
+
+        emit Withdraw(msg.sender, amount);
+    }
+
+    // duration -> seconds
+    function stake(uint256 duration, uint256 amountToBeStaked) external {
+        require(
+            balanceOf(msg.sender) >= amountToBeStaked,
             "You have insufficient funds to stake!"
         );
 
@@ -65,7 +112,8 @@ contract BerkToken is IBerkToken {
         accountStakeAmounts[msg.sender] = amountToBeStaked;
 
         // Take out the staked amount from the user balance.
-        balances[msg.sender] -= amountToBeStaked;
+        //_balances[msg.sender] -= amountToBeStaked;
+        _transfer(msg.sender, owner, amountToBeStaked);
 
         // Timestamp for stake duration.
         accountStakeDates[msg.sender] = block.timestamp + duration;
@@ -96,42 +144,8 @@ contract BerkToken is IBerkToken {
         return (amountToBeStaked * stakeRate) / 1000000000;
     }
 
-    function deposit(uint256 amount) public payable {
-        require(msg.value > 1, "Deposit amount must be more than 1 wei!");
-
-        uint256 tokenPrice = getTokenPrice();
-
-        require(
-            msg.value >= amount * tokenPrice,
-            "Deposit amount worth must be at least 1 berkcoin!"
-        );
-
-        // Here we get token amount based on the deposited ETH amount:
-        // If user deposit 1 ETH and current token price is 0.2 ETH, then
-        // user will have 5 tokens in his account address.
-
-        // uint256 depositedAmount = msg.value;
-        // balances[msg.sender] += depositedAmount / tokenPrice;
-        balances[msg.sender] += amount;
-        emit Deposit(msg.sender, msg.value);
-    }
-
-    function withdraw(uint256 amount) public {
-        require(
-            balances[msg.sender] >= amount,
-            "You don't have enough funds in your bank account!"
-        );
-
-        uint256 tokenPrice = getTokenPrice();
-
-        payable(msg.sender).transfer(amount * tokenPrice);
-        balances[msg.sender] -= amount;
-
-        emit Withdraw(msg.sender, amount);
-    }
-
     function checkStakeStatus(address publicAddress, uint256 currentTimeStamp)
-        public
+        external
     {
         uint256 stakeTimeStamp = accountStakeDates[publicAddress];
         require(
@@ -147,26 +161,19 @@ contract BerkToken is IBerkToken {
     // after adding up the staked amount to the current balance.
 
     function handleCompletedStake(address publicAddress) private {
-        balances[publicAddress] += accountStakeAmounts[publicAddress];
+        _transfer(owner, publicAddress, accountStakeAmounts[publicAddress]);
+        //_balances[publicAddress] += accountStakeAmounts[publicAddress];
         accountStakeDates[publicAddress] = 0;
         accountStakeAmounts[publicAddress] = 0;
         latestStakeRewards[publicAddress] = 0;
     }
 
-    function burnTokens(uint256 amountToBeBurned) public {
-        require(
-            balances[msg.sender] >= amountToBeBurned,
-            "You have insufficient funds to burn!"
-        );
-        balances[msg.sender] -= amountToBeBurned;
-    }
-
-    function getBalance(address publicAddress) public view returns (uint256) {
-        return balances[publicAddress];
+    function getBalance(address publicAddress) external view returns (uint256) {
+        return balanceOf(publicAddress);
     }
 
     function getStakeAmount(address publicAddress)
-        public
+        external
         view
         returns (uint256)
     {
@@ -174,7 +181,7 @@ contract BerkToken is IBerkToken {
     }
 
     function getCurrentStakeReward(address publicAddress)
-        public
+        external
         view
         returns (uint256)
     {
@@ -182,14 +189,14 @@ contract BerkToken is IBerkToken {
     }
 
     function getStakeCompletionDate(address publicAddress)
-        public
+        external
         view
         returns (uint256)
     {
         return accountStakeDates[publicAddress];
     }
 
-    function getInterest() public pure returns (uint256) {
+    function getInterest() external pure returns (uint256) {
         return interest;
     }
 
@@ -219,7 +226,7 @@ contract BerkToken is IBerkToken {
         string memory description,
         uint256 price,
         bool isAvailableToTrade
-    ) public {
+    ) external {
         collectibleToken.createNewCollectible(
             tokenUri,
             description,
@@ -228,27 +235,29 @@ contract BerkToken is IBerkToken {
             isAvailableToTrade
         );
         require(
-            balances[msg.sender] >= collectibleFee,
+            balanceOf(msg.sender) >= collectibleFee,
             "Sender doesn't have enough funds to pay registration fee!"
         );
-        balances[msg.sender] -= collectibleFee;
+        //_balances[msg.sender] -= collectibleFee;
+        _transfer(msg.sender, owner, collectibleFee);
     }
 
-    function burnCollectible(uint256 tokenID) public {
+    function burnCollectible(uint256 tokenID) external {
         collectibleToken.burnCollectible(tokenID, msg.sender);
     }
 
-    function setPriceOfCollectible(uint256 tokenID, uint256 price) public {
+    function setPriceOfCollectible(uint256 tokenID, uint256 price) external {
         require(
-            balances[msg.sender] >= collectibleFee / 10,
+            balanceOf(msg.sender) >= collectibleFee / 10,
             "Sender doesn't have enough funds to pay registration fee!"
         );
-        balances[msg.sender] -= collectibleFee / 10;
+        //_balances[msg.sender] -= collectibleFee / 10;
+        _transfer(msg.sender, owner, collectibleFee / 10);
         collectibleToken.setPriceOfCollectible(msg.sender, tokenID, price);
     }
 
     function setAvailabilityOfCollectible(uint256 tokenID, bool availability)
-        public
+        external
     {
         collectibleToken.setAvailabilityOfCollectible(
             msg.sender,
@@ -257,51 +266,56 @@ contract BerkToken is IBerkToken {
         );
     }
 
-    function buyCollectible(uint256 tokenID) public {
+    function buyCollectible(uint256 tokenID) external {
         uint256 price = collectibleToken.getPriceOfCollectible(tokenID);
         require(
             getAvailabilityOfToken(tokenID) == true,
             "Token is not available for trade!"
         );
         require(
-            price <= balances[msg.sender],
+            price <= balanceOf(msg.sender),
             "Sender doesn't have enough funds!"
         );
 
         address collectibleOwner = collectibleToken.getTokenOwner(tokenID);
-        balances[collectibleOwner] += price;
-        balances[msg.sender] -= price;
+        //_balances[collectibleOwner] += price;
+        //_balances[msg.sender] -= price;
+        _transfer(msg.sender, collectibleOwner, price);
         collectibleToken.transferCollectible(msg.sender, tokenID);
     }
 
     // NFT view functions:
 
-    function getTokenURI(uint256 tokenID) public view returns (string memory) {
+    function getTokenURI(uint256 tokenID)
+        external
+        view
+        returns (string memory)
+    {
         return collectibleToken.getTokenURI(tokenID);
     }
 
-    function getTokenCreator(uint256 tokenID) public view returns (address) {
+    function getTokenCreator(uint256 tokenID) external view returns (address) {
         return collectibleToken.getTokenCreator(tokenID);
     }
 
-    function getTokenOwner(uint256 tokenID) public view returns (address) {
+    function getTokenOwner(uint256 tokenID) external view returns (address) {
         return collectibleToken.getTokenOwner(tokenID);
     }
 
     function getTokenDescription(uint256 tokenID)
-        public
+        external
         view
         returns (string memory)
     {
         return collectibleToken.getTokenDescription(tokenID);
     }
 
-    function getTokenHash(uint256 tokenID) public view returns (bytes32) {
+    function getTokenHash(uint256 tokenID) external view returns (bytes32) {
         return collectibleToken.getTokenHash(tokenID);
     }
 
     function getPriceOfCollectible(uint256 tokenID)
-        public
+        external
         view
         returns (uint256)
     {
@@ -320,11 +334,11 @@ contract BerkToken is IBerkToken {
         return collectibleFee;
     }
 
-    function getTokenCount() public view returns (uint256) {
+    function getTokenCount() external view returns (uint256) {
         return collectibleToken.getTokenCount();
     }
 
-    function getAccessibility(uint256 tokenID) public view returns (bool) {
+    function getAccessibility(uint256 tokenID) external view returns (bool) {
         return collectibleToken.getAccessibility(tokenID);
     }
 

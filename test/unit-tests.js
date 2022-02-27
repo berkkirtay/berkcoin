@@ -3,8 +3,9 @@ const truffleAssert = require('truffle-assertions');
 var BerkToken = artifacts.require("./BerkToken.sol");
 
 contract("BerkToken", async accounts => {
+    var instance;
     it("Should buy 100000 berkcoins and sell them back", async () => {
-        const instance = await BerkToken.deployed();
+        instance = await BerkToken.new({ from: accounts[8] });
         const tokenPrice = await instance.getTokenPrice.call();
         await instance.deposit(100000, { from: accounts[0], value: (100000 * tokenPrice) });
         let balance = await instance.getBalance.call(accounts[0]);
@@ -16,7 +17,6 @@ contract("BerkToken", async accounts => {
 
         await instance.withdraw(100000, { from: accounts[0] });
         balance = await instance.getBalance.call(accounts[0]);
-
         assert.equal(
             balance,
             0,
@@ -25,7 +25,6 @@ contract("BerkToken", async accounts => {
     });
 
     it("Should be able to transfer berkcoins between peers", async () => {
-        const instance = await BerkToken.deployed();
         const tokenPrice = await instance.getTokenPrice.call();
         await instance.deposit(10, { from: accounts[0], value: (10 * tokenPrice) });
         await instance.send(accounts[1], 10, { from: accounts[0] });
@@ -45,7 +44,6 @@ contract("BerkToken", async accounts => {
     });
 
     it("Should withdraw after staking", async () => {
-        const instance = await BerkToken.deployed();
         const tokenPrice = await instance.getTokenPrice.call();
         const amount = 10000;
         await instance.deposit(amount, { from: accounts[0], value: (amount * tokenPrice) });
@@ -69,7 +67,6 @@ contract("BerkToken", async accounts => {
     })
 
     it("Contract balance should be 1 ETH", async () => {
-        const instance = await BerkToken.deployed();
         const tokenPrice = await instance.getTokenPrice.call();
         const amount = (1 / tokenPrice) * 10 ** 18;
         await instance.deposit(amount, { from: accounts[0], value: (amount * tokenPrice) });
@@ -82,7 +79,6 @@ contract("BerkToken", async accounts => {
     })
 
     it("Should burn specified amount of tokens", async () => {
-        const instance = await BerkToken.deployed();
         const tokenPrice = await instance.getTokenPrice.call();
         let balance = await instance.getBalance.call(accounts[0]);
         const amount = 1000000;
@@ -96,8 +92,21 @@ contract("BerkToken", async accounts => {
         );
     })
 
+    it("Should pay the collectible register fee", async () => {
+        const tokenPrice = await instance.getTokenPrice.call();
+        const tokenFee = await instance.getCollectibleFee.call();
+        await instance.deposit(tokenFee, { from: accounts[0], value: (tokenFee * tokenPrice) });
+        await instance.registerNewCollectible("uri", "description", 1000, true, { from: accounts[0] });
+        let balance = await instance.getBalance.call(accounts[0]);
+        assert.equal(
+            balance,
+            0,
+            "Collectible fee is not paid!"
+        );
+    });
+
     it("Should register new collectible and transfer it", async () => {
-        const instance = await BerkToken.deployed();
+        instance = await BerkToken.new({ from: accounts[8] });
         const tokenPrice = await instance.getTokenPrice.call();
         const tokenFee = await instance.getCollectibleFee.call();
         await instance.deposit(tokenFee, { from: accounts[0], value: (tokenFee * tokenPrice) });
@@ -115,7 +124,6 @@ contract("BerkToken", async accounts => {
     })
 
     it("Should not register a duplicate collectible", async () => {
-        const instance = await BerkToken.deployed();
         const tokenPrice = await instance.getTokenPrice.call();
         const tokenFee = await instance.getCollectibleFee.call() * 2;
         await instance.deposit(tokenFee, { from: accounts[3], value: (tokenFee * tokenPrice) });

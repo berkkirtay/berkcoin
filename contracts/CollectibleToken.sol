@@ -37,7 +37,7 @@ contract CollectibleToken {
         uint256 price,
         address owner,
         bool isAvailableToTrade
-    ) public {
+    ) external {
         require(collectibleURIs[tokenURI] == 0, "Token URI is already owned!");
 
         bytes32 computedHash = calculateCollectibleHash(
@@ -79,7 +79,7 @@ contract CollectibleToken {
             );
     }
 
-    function transferCollectible(address to, uint256 tokenID) public {
+    function transferCollectible(address to, uint256 tokenID) external {
         address oldOwner = collectibleOwners[tokenID];
         collectibleOwners[tokenID] = to;
         collectibles[tokenID].ownerAddress = to;
@@ -87,7 +87,7 @@ contract CollectibleToken {
         emit CollectibleTransfer(oldOwner, to, tokenID);
     }
 
-    function burnCollectible(uint256 tokenID, address sender) public {
+    function burnCollectible(uint256 tokenID, address sender) external {
         require(
             collectibles[tokenID].ownerAddress == sender,
             "Sender must be the owner of the collectibe!"
@@ -101,7 +101,7 @@ contract CollectibleToken {
         address owner,
         uint256 tokenID,
         uint256 price
-    ) public {
+    ) external {
         require(
             collectibleOwners[tokenID] == owner,
             "Sender doesn't own the collectible!"
@@ -115,7 +115,7 @@ contract CollectibleToken {
         address owner,
         uint256 tokenID,
         bool availability
-    ) public {
+    ) external {
         require(
             collectibleOwners[tokenID] == owner,
             "Sender doesn't own the collectible!"
