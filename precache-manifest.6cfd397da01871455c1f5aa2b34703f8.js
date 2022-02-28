@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "ec7404449286897f58a78ca24a7416f9",
+    "revision": "6542f0f3d350acd5b28aa8b90b939dce",
     "url": "/berkcoin/index.html"
   },
   {
