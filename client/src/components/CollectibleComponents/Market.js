@@ -7,7 +7,7 @@ import Collectible from "./Collectible";
 import RegisterModal from "./RegisterModal";
 
 
-const Market = ({ account, contract }) => {
+const Market = ({ account, contract, refresher }) => {
     const [modalState, setModalState] = useState(false);
     const [collectibles, setCollectibles] = useState(undefined);
     const [refresh, setRefresh] = useState(false);
@@ -17,6 +17,7 @@ const Market = ({ account, contract }) => {
     const navigate = useNavigate();
     useEffect(() => {
         getAllNFTs();
+        refresher();
         navigate("/berkcoin/market");
     }, [refresh])
 

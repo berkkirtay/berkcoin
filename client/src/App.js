@@ -101,7 +101,8 @@ function App() {
 
         <Route path='/berkcoin/market' element={<Market
           account={accounts[0]}
-          contract={contract} />} />
+          contract={contract}
+          refresher={() => getBalance()} />} />
 
         <Route path='/berkcoin/trade' element={<Trade
           account={accounts[0]}

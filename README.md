@@ -1,15 +1,21 @@
-## Berkcoin dApp project with Truffle 
+# Berkcoin Decentralized App 
 [![Node.js CI](https://github.com/berkkirtay/berkcoin/actions/workflows/berkcoin_tests.yml/badge.svg)](https://github.com/berkkirtay/berkcoin/actions/workflows/berkcoin_tests.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-#### Website is deployed on ropsten testnet at: [berkkirtay.github.io/berkcoin](https://berkkirtay.github.io/berkcoin)
 
-### Basic usage:
-Any network can be used via getWeb3 function.
+**Berkcoin is an interactive token environment that allows users to trade and stake their tokens along with NFT features.
+It uses ERC20 token standard with its own features. Contracts are deployed with truffle framework.
+This project aims to be a basic token environment with standard features. 
+To ensure integrity and functionality of contracts I included unit tests and CI.**
+
+**Website is deployed on ropsten testnet at: [berkkirtay.github.io/berkcoin](https://berkkirtay.github.io/berkcoin)**
+
+## Basic usage:
+Any wallet provider can be used via getWeb3 function.
 
 ### Requirements:
-- Metamask
-- Any Ethereum testnet (preferably you can use ganache)
-- Truffle (in order to compile contracts)
+- Metamask for transactions
+- Any Ethereum testnet (preferably you can use ganache or ropsten testnet)
+- Truffle (to compile contracts and migrate)
 
 ### Compiling the Contracts:
 1. Set related fields in truffle-config.js and migrations folder
@@ -36,4 +42,3 @@ cd client && npm run start
 ### Collectible Info: 
 
 ![Enc1](https://raw.githubusercontent.com/berkkirtay/berkcoin/main/examples/CollectibleInfo.PNG)
-

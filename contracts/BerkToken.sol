@@ -21,13 +21,15 @@ contract BerkToken is IBerkToken, ERC20 {
 
     // Stake reward rate
     uint256 private constant interest = 2;
-    uint256 private constant minimumTokenValue = 10000000000000;
-    uint256 private maxSupply = 1000000000000;
+    uint256 private constant minimumTokenValue = 1000000000000;
+    // 10**18 means 18 decimal points.
+    // 1 berkcoin = 1 * 10**18.
+    uint256 private maxSupply = 100000000 * 10**18;
 
     CollectibleToken private collectibleToken;
     uint256 public collectibleFee;
 
-    constructor() ERC20("berkcoin", "berk") {
+    constructor() ERC20("berkcoin", "BERK") {
         owner = msg.sender;
         collectibleToken = new CollectibleToken();
         collectibleFee = collectibleToken.getTransactionFee();
@@ -40,12 +42,12 @@ contract BerkToken is IBerkToken, ERC20 {
             msg.sender == owner,
             "Only contract owner can mint new tokens!"
         );
-        _mint(account, amount);
-        maxSupply += amount;
+        _mint(account, amount * 10**18);
+        maxSupply += amount * 10**18;
     }
 
     function burnTokens(uint256 amount) external {
-        _burn(msg.sender, amount);
+        _burn(msg.sender, amount * 10**18);
     }
 
     /*
@@ -55,12 +57,12 @@ contract BerkToken is IBerkToken, ERC20 {
      */
 
     function send(address receiver, uint256 amount) external {
-        _transfer(msg.sender, receiver, amount);
-        emit Sent(msg.sender, receiver, amount);
+        _transfer(msg.sender, receiver, amount * 10**18);
+        emit Sent(msg.sender, receiver, amount * 10**18);
     }
 
     function deposit(uint256 amount) external payable {
-        require(msg.value >= 1, "Deposit amount must be at least 1 berkcoin!");
+        require(msg.value >= 1, "Deposit amount must be at least 1 wei!");
 
         uint256 tokenPrice = getTokenPrice();
 
@@ -72,30 +74,31 @@ contract BerkToken is IBerkToken, ERC20 {
         // compansate the additional number of ETH.
 
         require(
-            msg.value >= amount * tokenPrice,
+            msg.value >= (amount * tokenPrice),
             "Deposit amount worth must be at least 1 berkcoin!"
         );
 
-        _transfer(owner, msg.sender, amount);
+        _transfer(owner, msg.sender, amount * 10**18);
         emit Deposit(msg.sender, msg.value);
     }
 
     function withdraw(uint256 amount) external {
         require(
-            balanceOf(msg.sender) >= amount,
+            balanceOf(msg.sender) >= amount * 10**18,
             "You don't have enough funds in your bank account!"
         );
 
         uint256 tokenPrice = getTokenPrice();
 
         payable(msg.sender).transfer(amount * tokenPrice);
-        _transfer(msg.sender, owner, amount);
+        _transfer(msg.sender, owner, amount * 10**18);
 
         emit Withdraw(msg.sender, amount);
     }
 
     // duration -> seconds
     function stake(uint256 duration, uint256 amountToBeStaked) external {
+        amountToBeStaked *= 10**18;
         require(
             balanceOf(msg.sender) >= amountToBeStaked,
             "You have insufficient funds to stake!"
@@ -162,14 +165,13 @@ contract BerkToken is IBerkToken, ERC20 {
 
     function handleCompletedStake(address publicAddress) private {
         _transfer(owner, publicAddress, accountStakeAmounts[publicAddress]);
-        //_balances[publicAddress] += accountStakeAmounts[publicAddress];
         accountStakeDates[publicAddress] = 0;
         accountStakeAmounts[publicAddress] = 0;
         latestStakeRewards[publicAddress] = 0;
     }
 
     function getBalance(address publicAddress) external view returns (uint256) {
-        return balanceOf(publicAddress);
+        return balanceOf(publicAddress) / 10**18;
     }
 
     function getStakeAmount(address publicAddress)
@@ -177,7 +179,7 @@ contract BerkToken is IBerkToken, ERC20 {
         view
         returns (uint256)
     {
-        return accountStakeAmounts[publicAddress];
+        return accountStakeAmounts[publicAddress] / 10**18;
     }
 
     function getCurrentStakeReward(address publicAddress)
@@ -185,7 +187,7 @@ contract BerkToken is IBerkToken, ERC20 {
         view
         returns (uint256)
     {
-        return latestStakeRewards[publicAddress];
+        return latestStakeRewards[publicAddress] / 10**18;
     }
 
     function getStakeCompletionDate(address publicAddress)
@@ -230,7 +232,7 @@ contract BerkToken is IBerkToken, ERC20 {
         collectibleToken.createNewCollectible(
             tokenUri,
             description,
-            price,
+            price * 10**18,
             msg.sender,
             isAvailableToTrade
         );
@@ -251,9 +253,12 @@ contract BerkToken is IBerkToken, ERC20 {
             balanceOf(msg.sender) >= collectibleFee / 10,
             "Sender doesn't have enough funds to pay registration fee!"
         );
-        //_balances[msg.sender] -= collectibleFee / 10;
         _transfer(msg.sender, owner, collectibleFee / 10);
-        collectibleToken.setPriceOfCollectible(msg.sender, tokenID, price);
+        collectibleToken.setPriceOfCollectible(
+            msg.sender,
+            tokenID,
+            price * 10**18
+        );
     }
 
     function setAvailabilityOfCollectible(uint256 tokenID, bool availability)
@@ -278,8 +283,6 @@ contract BerkToken is IBerkToken, ERC20 {
         );
 
         address collectibleOwner = collectibleToken.getTokenOwner(tokenID);
-        //_balances[collectibleOwner] += price;
-        //_balances[msg.sender] -= price;
         _transfer(msg.sender, collectibleOwner, price);
         collectibleToken.transferCollectible(msg.sender, tokenID);
     }
@@ -319,7 +322,7 @@ contract BerkToken is IBerkToken, ERC20 {
         view
         returns (uint256)
     {
-        return collectibleToken.getPriceOfCollectible(tokenID);
+        return collectibleToken.getPriceOfCollectible(tokenID) / 10**18;
     }
 
     function getAvailabilityOfToken(uint256 tokenID)
@@ -331,7 +334,7 @@ contract BerkToken is IBerkToken, ERC20 {
     }
 
     function getCollectibleFee() public view returns (uint256) {
-        return collectibleFee;
+        return collectibleFee / 10**18;
     }
 
     function getTokenCount() external view returns (uint256) {
