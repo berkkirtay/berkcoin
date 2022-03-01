@@ -91,8 +91,7 @@ const Trade = ({ account, contract, balance, ethBalance, getBalance }) => {
                     <input type="number" required
                         value={withdrawAmount} onChange={(e) => setWithdrawAmount(e.target.value)} />
                     <label>Current Price: </label>
-                    <input type="number" required
-                        value={withdrawPrice / 10 ** 18} />
+                    <input type="number" required defaultValue={withdrawPrice / 10 ** 18} />
                     {withdrawAmount !== 0 && <h3 style={{ color: "green", textAlign: "center" }}>You will get {withdrawAmount * withdrawPrice / 10 ** 18} ETH</h3>}
                     <button style={{ display: "inline-block", marginLeft: "39%" }}>Sell berkcoin</button>
                 </form>
@@ -106,7 +105,6 @@ const Trade = ({ account, contract, balance, ethBalance, getBalance }) => {
                     <label>Recipient wallet address:</label>
                     <input type="text" required
                         value={transferAddress} onChange={(e) => setTransferAddress(e.target.value)} />
-                    {withdrawAmount !== 0 && <h3 style={{ color: "green", textAlign: "center" }}>You will get {withdrawAmount * withdrawPrice / 10 ** 18} ETH</h3>}
                     <button style={{ display: "inline-block", marginLeft: "39%" }}>Send berkcoin</button>
                 </form>
             </div>

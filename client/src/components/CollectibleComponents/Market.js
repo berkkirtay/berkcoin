@@ -18,11 +18,11 @@ const Market = ({ account, contract, refresher }) => {
     useEffect(() => {
         getAllNFTs();
         refresher();
-        navigate("/berkcoin/market");
+        navigate("/market");
     }, [refresh])
 
     useEffect(() => {
-        navigate("/berkcoin/market");
+        navigate("/market");
     }, [sort]);
 
 

@@ -86,32 +86,32 @@ function App() {
   }
 
   return (
-    <Router>
+    <Router basename='berkcoin'>
       <Header
         account={accounts[0]}
       />
       <Nav />
       <Routes>
-        <Route path='/berkcoin/' element={<Navigate to={"/berkcoin/wallet"} />} />
+        <Route path='/' element={<Navigate to={"/wallet"} />} />
 
-        <Route path='/berkcoin/wallet' element={<Wallet
+        <Route path='/wallet' element={<Wallet
           web3={web3}
           account={accounts[0]}
           balance={balance} />} />
 
-        <Route path='/berkcoin/market' element={<Market
+        <Route path='/market' element={<Market
           account={accounts[0]}
           contract={contract}
           refresher={() => getBalance()} />} />
 
-        <Route path='/berkcoin/trade' element={<Trade
+        <Route path='/trade' element={<Trade
           account={accounts[0]}
           contract={contract}
           balance={balance}
           ethBalance={ethBalance}
           getBalance={getBalance} />} />
 
-        <Route path='/berkcoin/staking' element={<Staking
+        <Route path='/staking' element={<Staking
           account={accounts[0]}
           contract={contract}
           balance={balance} />} />
