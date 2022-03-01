@@ -1,21 +1,21 @@
 {
   "files": {
     "main.css": "/berkcoin/static/css/main.252eff83.chunk.css",
-    "main.js": "/berkcoin/static/js/main.94c27781.chunk.js",
-    "main.js.map": "/berkcoin/static/js/main.94c27781.chunk.js.map",
+    "main.js": "/berkcoin/static/js/main.ec0e429e.chunk.js",
+    "main.js.map": "/berkcoin/static/js/main.ec0e429e.chunk.js.map",
     "runtime-main.js": "/berkcoin/static/js/runtime-main.7506f390.js",
     "runtime-main.js.map": "/berkcoin/static/js/runtime-main.7506f390.js.map",
-    "static/js/2.4f1af9e3.chunk.js": "/berkcoin/static/js/2.4f1af9e3.chunk.js",
-    "static/js/2.4f1af9e3.chunk.js.map": "/berkcoin/static/js/2.4f1af9e3.chunk.js.map",
+    "static/js/2.2adb144f.chunk.js": "/berkcoin/static/js/2.2adb144f.chunk.js",
+    "static/js/2.2adb144f.chunk.js.map": "/berkcoin/static/js/2.2adb144f.chunk.js.map",
     "index.html": "/berkcoin/index.html",
-    "precache-manifest.493d75d8d58b0a13a5a3e13c1b1f0d69.js": "/berkcoin/precache-manifest.493d75d8d58b0a13a5a3e13c1b1f0d69.js",
+    "precache-manifest.a1d46c10c80607bcfb31896469eb144e.js": "/berkcoin/precache-manifest.a1d46c10c80607bcfb31896469eb144e.js",
     "service-worker.js": "/berkcoin/service-worker.js",
     "static/css/main.252eff83.chunk.css.map": "/berkcoin/static/css/main.252eff83.chunk.css.map"
   },
   "entrypoints": [
     "static/js/runtime-main.7506f390.js",
-    "static/js/2.4f1af9e3.chunk.js",
+    "static/js/2.2adb144f.chunk.js",
     "static/css/main.252eff83.chunk.css",
-    "static/js/main.94c27781.chunk.js"
+    "static/js/main.ec0e429e.chunk.js"
   ]
 }
