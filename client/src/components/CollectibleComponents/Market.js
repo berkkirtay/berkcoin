@@ -18,7 +18,6 @@ const Market = ({ account, contract, refresher }) => {
     useEffect(() => {
         getAllNFTs();
         refresher();
-        navigate("/market");
     }, [refresh])
 
     useEffect(() => {

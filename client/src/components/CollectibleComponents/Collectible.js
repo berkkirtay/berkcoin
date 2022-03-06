@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { CollectibleModal } from './CollectibleModal';
 
 const Collectible = ({ account, collectible, onBuy, onSetPrice, onBurn, fee }) => {

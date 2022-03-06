@@ -6,6 +6,7 @@
   "dependencies": {
     "@openzeppelin/contracts": "^4.5.0",
     "@truffle/hdwallet-provider": "^2.0.3",
+    "abi-decoder": "^2.4.0",
     "bignumber.js": "^9.0.2",
     "ethereumjs-wallet": "^1.0.1",
     "gh-pages": "^3.2.3",

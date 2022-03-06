@@ -74,7 +74,7 @@ function App() {
 
   if (web3 === undefined || accounts === undefined || contract === undefined) {
     return (
-      <Router>
+      <Router basename='berkcoin'>
         <Header
           account={undefined}
           connect={() => window.location.reload()} />

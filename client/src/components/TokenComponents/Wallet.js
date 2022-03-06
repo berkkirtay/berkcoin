@@ -1,53 +1,88 @@
 import React, { useEffect, useState } from 'react';
 import LoadingTriangle from '../PageComponents/LoadingTriangle';
-import BigNumber from 'bignumber.js';
+import abiDecoder from 'abi-decoder';
+import BerkToken from '../../contracts/BerkToken.json';
 
 const Wallet = ({ web3, account, balance }) => {
     // API URI can be changed based on the network where token was deployed.
     const apiURI = "http://ropsten.etherscan.io/tx/";
+    const contractAddress = "0x4f96994119416199e1276a59b580e070278da3a1";
 
-    const [transactions, setTransactions] = useState(undefined);
+    const [transactions, setTransactions] = useState([]);
+
     useEffect(() => {
-        const retrieveTransactions = async () => {
-            const transactions = [];
-            const latestBlockIndex = await web3.eth.getBlockNumber();
-            for (var i = 0; i < 30; i++) {
-                const block = await web3.eth.getBlock(latestBlockIndex - i, true);
-                block.transactions.forEach((transaction) => {
-                    if (transaction.from === account) {
-                        transactions.push(transaction);
-                    }
-                })
-            }
-            setTransactions(transactions);
-        }
         retrieveTransactions();
+        return () => {
+            setTransactions([]);
+        }
+
     }, [])
 
-    const getValue = (transaction) => {
-        //input format: 32-256-256-256
-        const input = String(transaction.input);
-        const tokens = input.substring(8, input.length);
-        return new BigNumber("0x".concat(tokens.substring(128, input.length)), 16).toString(10);
+    const retrieveTransactions = async () => {
+        abiDecoder.addABI(BerkToken.abi);
+        const transactions = [];
+        // We can easily fetch indexed transactions:
+        const pastLogs = await web3.eth.getPastLogs(
+            { fromBlock: '0x0', address: contractAddress });
+        // Decoding transactions inputs:
+        const filteredTransactions = new Set();
+        pastLogs.forEach(async (log) => {
+            const transaction = await web3.eth.getTransaction(log.transactionHash);
+            if (transaction.from === account) {
+                const decodedLog = abiDecoder.decodeMethod(transaction.input);
+                if (decodedLog !== undefined) {
+                    if (filteredTransactions.has(transaction.hash) === false) {
+                        filteredTransactions.add(transaction.hash);
+                        var value = 0;
+                        if (decodedLog.name === "send" || decodedLog.name === "stake") {
+                            const params = decodedLog.params;
+                            value = params[1].value;
+                        }
+                        transactions.push({
+                            "hash": transaction.hash,
+                            "log": decodedLog,
+                            "value": value
+                        });
+                    }
+                }
+            }
+        })
+        setTransactions(transactions);
     }
+
     return (
         <div style={{ margin: "0 auto" }}>
             <h3>User: {account}</h3>
             <h3>User Balance: {balance} {balance !== 0 && "berkcoins"}</h3>
             <h3>Your Latest Transactions:</h3>
-            {transactions === undefined &&
+            {transactions.length !== 0 &&
+                <table className="transactionList">
+                    <tbody>
+                        <tr>
+                            <th >Transaction Hash</th>
+                            <th >Transaction Method</th>
+                            <th >Berkcoin Value</th>
+                        </tr>
+                        {transactions.slice(0).map((transaction) => (
+                            <tr key={transaction.hash}>
+                                <td >
+                                    <a style={{ color: "green" }}
+                                        href={apiURI + transaction.hash}
+                                        target="_blank" rel="noopener noreferrer">
+                                        {transaction.hash}
+                                        <span>&#x2197;</span>
+                                    </a>
+                                </td>
+                                <td>{transaction.log.name}</td>
+                                <td>{transaction.value}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            }
+            {transactions.length === 0 &&
                 <LoadingTriangle />
             }
-            <ul style={{ listStyleType: "none", marginTop: "5%" }}>
-                {transactions !== undefined && transactions.slice(0).map((transaction) => (
-                    <li key={transaction.hash} style={{ width: "80%", border: "1px solid black", display: "inline-block", boxSizing: "border-box" }}>
-                        <p>
-                            <span style={{ color: "green", marginLeft: "3%" }}>Tx: <a style={{ color: "green" }} href={apiURI + transaction.hash} target="_blank">{transaction.hash}</a></span>
-                            <span style={{ float: "right", color: "green", marginRight: "3%" }}>Berkcoin Value: {getValue(transaction)}</span>
-                        </p>
-                    </li>
-                ))}
-            </ul>
         </div >
     )
 }
