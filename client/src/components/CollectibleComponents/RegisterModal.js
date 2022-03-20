@@ -38,8 +38,15 @@ const RegisterModal = ({ modalState, setModalState, onRegister, fee }) => {
                         },
                     }
                 }>
+
                 <button style={{ "float": "right", "marginTop": "1%" }} onClick={setModalState}>Close</button>
                 <h1 >Register a NFT:</h1>
+                {tokenURI !== "" &&
+                    <div style={{ float: "right", margin: "5%", textAlign: "center" }} >
+                        <h4>NFT Appearance</h4>
+                        <img style={{ width: "100px", height: "100px", borderRadius: "10%", margin: "0 auto" }} alt="collectible" src={tokenURI} />
+                    </div>
+                }
                 <form id="newOrder" onSubmit={onSubmit}>
                     <label>Collectible Token URI: </label>
                     <input type="string" required
@@ -50,13 +57,11 @@ const RegisterModal = ({ modalState, setModalState, onRegister, fee }) => {
                     <label>Collectible Price (berkcoins): </label>
                     <input type="number" required
                         value={price} onChange={(e) => setPrice(e.target.value)} />
-
-
                     <input style={{ float: "right", margin: "0", padding: "0", marginTop: "2%" }} type="checkbox"
                         value={availability} onChange={(e) => setAvailability(!availability)} />
                     <label style={{ display: "inline" }}>Set available: </label>
                     <h3 style={{ marginLeft: "10%" }}>Collectible will {!availability && "not"} be listed as available for trade.</h3>
-                    {price !== 0 && <h3 style={{ color: "red", textAlign: "center" }}>You will pay {fee} berkcoins registration fee.</h3>}
+                    {price !== 0 && <h3 style={{ color: "red", marginLeft: "10%" }}>You will pay {fee} berkcoins registration fee.</h3>}
                     <button style={{ display: "flex", margin: "auto", marginTop: "5%" }}>Register</button>
                 </form>
             </Modal>
