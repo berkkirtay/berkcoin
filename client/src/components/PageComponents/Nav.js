@@ -9,6 +9,7 @@ const Nav = () => {
                     <li className="nav"><Link to="/market">Market</Link></li>
                     <li className="nav"><Link to="/trade">Trade</Link></li>
                     <li className="nav"><Link to="/staking">Staking</Link></li>
+                    <li className="nav"><Link to="/social">Social</Link></li>
                 </ul>
             </nav>
         </div>

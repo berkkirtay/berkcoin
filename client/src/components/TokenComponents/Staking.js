@@ -24,10 +24,12 @@ const Staking = ({ account, contract, balance }) => {
             getInterest();
             getContractBalance();
         }
-    }, [refresh])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [contract, refresh])
 
     useEffect(() => {
         calculateStakeReward();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [depositAmount, stakeDuration])
 
     const onStake = async (e) => {
@@ -91,7 +93,7 @@ const Staking = ({ account, contract, balance }) => {
         const currentTimeStamp = Math.round((new Date()).getTime() / 1000);
         try {
             if (stakedBalance === 0) {
-                throw "Stake balance is 0!";
+                throw Error("Stake balance is 0!");
             }
             await contract.methods.checkStakeStatus(account, currentTimeStamp)
                 .send({ from: account });
@@ -111,7 +113,7 @@ const Staking = ({ account, contract, balance }) => {
     }
     return (
         <div>
-            <h3>Wallet Public Address: {account} <span style={{ float: "right" }}> Total Circulation Value: {availableStake} ETH</span></h3>
+            <h3>Wallet Public Address: {account} <span style={{ float: "right" }}> Total Token Value: {availableStake} ETH</span></h3>
             <h3>Balance: {balance}</h3>
             <h3>Staked amount: {stakedBalance}</h3>
             <h3>Earnings from staking : {stakeReward}</h3>

@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 import Collectible from "./Collectible";
 import RegisterModal from "./RegisterModal";
+import { getCollectibles } from "../../services/ContractHelper";
 
 
 const Market = ({ account, contract, refresher }) => {
@@ -18,11 +19,12 @@ const Market = ({ account, contract, refresher }) => {
     useEffect(() => {
         getAllNFTs();
         refresher();
-    }, [refresh])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [refresh, refresher])
 
     useEffect(() => {
         navigate("/market");
-    }, [sort]);
+    }, [navigate, sort]);
 
 
     const getAllNFTs = async () => {
@@ -30,61 +32,8 @@ const Market = ({ account, contract, refresher }) => {
             .call({ from: account });
         setFee(fee);
 
-        const collectibles = [];
-
-        const tokenCount = await contract.methods.getTokenCount()
-            .call({ from: account });
-
-        for (var i = 1; i <= tokenCount; i++) {
-            const accessibility = await contract.methods.getAccessibility(i)
-                .call({ from: account });
-            if (accessibility === false) {
-                continue;
-            }
-            const tokenURI = await contract.methods.getTokenURI(i)
-                .call({ from: account });
-            const tokenOwner = await contract.methods.getTokenOwner(i)
-                .call({ from: account });
-            const tokenCreator = await contract.methods.getTokenCreator(i)
-                .call({ from: account });
-            const tokenDescription = await contract.methods.getTokenDescription(i)
-                .call({ from: account });
-            const priceOfCollectible = await contract.methods.getPriceOfCollectible(i)
-                .call({ from: account });
-            const collectibleHash = await contract.methods.getTokenHash(i)
-                .call({ from: account });
-            const availability = await contract.methods.getAvailabilityOfToken(i)
-                .call({ from: account });
-
-            // Price level:
-            var priceLevel = "green";
-            if (priceOfCollectible >= 200000) {
-                priceLevel = "darkviolet";
-            }
-            else if (priceOfCollectible >= 100000) {
-                priceLevel = "#ff5202";
-            }
-            else if (priceOfCollectible >= 50000) {
-                priceLevel = "red";
-            }
-            else if (priceOfCollectible >= 10000) {
-                priceLevel = "blue";
-            }
-
-            const Collectible = {
-                "tokenID": i,
-                "tokenURI": tokenURI,
-                "tokenCreator": tokenCreator,
-                "tokenOwner": tokenOwner,
-                "tokenDescription": tokenDescription,
-                "priceOfCollectible": priceOfCollectible,
-                "collectibleHash": collectibleHash,
-                "priceLevel": priceLevel,
-                "availability": availability
-            }
-            collectibles.push(Collectible);
-        }
-        setCollectibles(collectibles);
+        const retrievedCollectibles = await getCollectibles(account, contract);
+        setCollectibles(retrievedCollectibles);
     }
 
     const registerNFT = () => {
@@ -104,7 +53,7 @@ const Market = ({ account, contract, refresher }) => {
     }
 
     const onSetPrice = async (tokenID, newPrice, availability) => {
-        const oldPrice = collectibles.find(({ tokenID }) => tokenID === tokenID).priceOfCollectible;
+        const oldPrice = collectibles.find({ tokenID }).priceOfCollectible;
         if (oldPrice !== newPrice) {
             await contract.methods.setPriceOfCollectible(tokenID, newPrice)
                 .send({ from: account });

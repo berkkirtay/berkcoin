@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useState } from "react"
-
 import { BigNumber } from "bignumber.js"
 
 const Trade = ({ account, contract, balance, ethBalance, getBalance }) => {
@@ -26,7 +25,7 @@ const Trade = ({ account, contract, balance, ethBalance, getBalance }) => {
         }
 
         fetchCurrentTokenPrice();
-    }, []);
+    }, [account, contract.methods]);
 
     const deposit = async () => {
         let normalizedUserPrice = new BigNumber(userPrice).multipliedBy(10 ** 18).toFixed();

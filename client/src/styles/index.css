@@ -39,7 +39,7 @@ li.nav a {
 }
 
 li.nav a:hover:not(li.nav a:active) {
-  color: #0344d1;
+  color: #00BFFF;
 }
 
 li.nav a:active {
@@ -115,7 +115,7 @@ button {
 }
 
 button:hover:not(.active) {
-  background-color: #0742c0;
+  background-color: #0948cf;
 }
 
 button:active {
@@ -165,7 +165,7 @@ button:active {
   border-collapse: collapse;
 }
 .transactionList a {
-  color: green;
+  color: #00BFFF;
   text-decoration: none;
 }
 
@@ -175,7 +175,7 @@ button:active {
 
 .transactionList th,
 td {
-  color: green;
+  color: #0948cf;
   border: 1px solid black;
   text-align: left;
   padding: 5px;

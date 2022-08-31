@@ -21,9 +21,21 @@ const Collectible = ({ account, collectible, onBuy, onSetPrice, onBurn, fee }) =
         changeModalState();
     }
 
+    const collectibleStyle = {
+        display: "flex",
+        justifyContent: "center",
+        margin: "3%",
+        backgroundColor: "#00BFFF",
+        width: "300px",
+        height: "390px",
+        borderRadius: "4%",
+        float: "left",
+        cursor: "pointer"
+    }
+
     return (
 
-        <div onClick={changeModalState} style={{ display: "flex", justifyContent: "center", margin: "3%", backgroundColor: "#9BB7D4", width: "300px", height: "390px", borderRadius: "4%", float: "left", cursor: "pointer" }}>
+        <div onClick={changeModalState} style={collectibleStyle}>
 
             {collectibleModalState === true &&
                 <CollectibleModal
@@ -40,13 +52,21 @@ const Collectible = ({ account, collectible, onBuy, onSetPrice, onBurn, fee }) =
             <div style={{ margin: "10px" }}>
                 <li key={collectible.tokenID}>
                     <div style={{ backgroundColor: collectible.priceLevel, borderRadius: "4%" }}>
-                        <img style={{ width: "250px", height: "250px", borderRadius: "10%", padding: "5px" }} src={collectible.tokenURI} />
+                        <img style={{ width: "250px", height: "250px", borderRadius: "10%", padding: "5px" }}
+                            alt={collectible.tokenDescription} src={collectible.tokenURI} />
                     </div>
-                    <p style={{ color: collectible.priceLevel, textAlign: "center", fontWeight: "bold" }}>{collectible.tokenDescription}</p>
-                    <p style={{ color: collectible.priceLevel, textAlign: "center", fontWeight: "bold" }}>{collectible.priceOfCollectible} berkcoins</p>
-                    {collectible.availability === true && <p style={{ color: "blue", textAlign: "center", fontWeight: "bold" }}>(On sale)</p>}
+                    <p style={{ color: collectible.priceLevel, textAlign: "center", fontWeight: "bold" }}>
+                        {collectible.tokenDescription}
+                    </p>
+                    <p style={{ color: collectible.priceLevel, textAlign: "center", fontWeight: "bold" }}>
+                        {collectible.priceOfCollectible} berkcoins
+                    </p>
+                    {collectible.availability === true &&
+                        <p style={{ color: "blue", textAlign: "center", fontWeight: "bold" }}>
+                            (On sale)
+                        </p>
+                    }
                 </li>
-
             </div>
         </div>
     )

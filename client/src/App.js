@@ -5,12 +5,12 @@ import { useState, useEffect } from "react"
 import getWeb3 from "./services/getWeb3";
 import BerkToken from "./contracts/BerkToken";
 
-
 import Nav from "./components/PageComponents/Nav";
 import Wallet from "./components/TokenComponents/Wallet";
 import Market from "./components/CollectibleComponents/Market";
 import Trade from "./components/TokenComponents/Trade";
 import Staking from "./components/TokenComponents/Staking";
+import Social from "./components/SocialComponents/Social";
 import { Header } from './components/PageComponents/Header';
 import LoadingTriangle from './components/PageComponents/LoadingTriangle';
 
@@ -30,6 +30,7 @@ function App() {
     if (web3 !== undefined && accounts !== undefined && contract !== undefined) {
       getBalance();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [web3, accounts, contract])
 
   const componentDidMount = async () => {
@@ -96,6 +97,7 @@ function App() {
 
         <Route path='/wallet' element={<Wallet
           web3={web3}
+          contract={contract}
           account={accounts[0]}
           balance={balance} />} />
 
@@ -115,6 +117,9 @@ function App() {
           account={accounts[0]}
           contract={contract}
           balance={balance} />} />
+
+        <Route path='/social' element={<Social
+        />} />
       </Routes>
     </Router>
   );
