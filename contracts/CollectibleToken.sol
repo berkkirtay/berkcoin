@@ -46,6 +46,7 @@ contract CollectibleToken {
             price,
             owner
         );
+
         collectibles[tokenCounter] = Collectible(
             tokenURI,
             owner,
@@ -54,6 +55,7 @@ contract CollectibleToken {
             description,
             price
         );
+        
         availableToTradeCollectibles[tokenCounter] = isAvailableToTrade;
         collectibleURIs[tokenURI] = tokenCounter;
         collectibleOwners[tokenCounter++] = owner;

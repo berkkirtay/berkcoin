@@ -62,7 +62,7 @@ const Staking = ({ account, contract, balance }) => {
         }
 
         const date = new Date(response * 1000).toLocaleDateString("en-US");
-        const time = new Date(response * 1000).toLocaleTimeString("en-US")
+        const time = new Date(response * 1000).toLocaleTimeString("en-US");
         setStakedDuration(date + " " + time);
     };
 
@@ -113,12 +113,15 @@ const Staking = ({ account, contract, balance }) => {
     }
     return (
         <div>
-            <h3>Wallet Public Address: {account} <span style={{ float: "right" }}> Total Token Value: {availableStake} ETH</span></h3>
+            <h3>Wallet Public Address: {account} <span style={{ float: "right" }}>
+                Total Token Value: {availableStake} ETH</span>
+            </h3>
             <h3>Balance: {balance}</h3>
             <h3>Staked amount: {stakedBalance}</h3>
             <h3>Earnings from staking : {stakeReward}</h3>
             <h3>Staking will end : {stakedDuration}</h3>
-            <button onClick={checkStakeStatus} style={{ display: "inline-block" }}>Withdraw stake</button>
+            <button onClick={checkStakeStatus}
+                style={{ display: "inline-block" }}>Withdraw stake</button>
 
             <div id="trade">
                 <h2>Stake berkcoin</h2>
@@ -129,9 +132,10 @@ const Staking = ({ account, contract, balance }) => {
                     <label>Duration (hours): </label>
                     <input type="number" required
                         value={stakeDuration} onChange={(e) => setStakeDuration(e.target.value)} />
-                    <h3 style={{ color: "green", textAlign: "center" }}>You will earn {calculatedStakeReward} berkcoins after stake completion.</h3>
+                    <h3 style={{ color: "green", textAlign: "center" }}>
+                        You will earn {calculatedStakeReward} berkcoins after stake completion.
+                    </h3>
                     <button style={{ display: "inline-block", marginLeft: "36%" }}>Stake berkcoin</button>
-
                 </form>
             </div>
         </div>

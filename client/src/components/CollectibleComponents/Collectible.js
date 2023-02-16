@@ -25,7 +25,7 @@ const Collectible = ({ account, collectible, onBuy, onSetPrice, onBurn, fee }) =
         display: "flex",
         justifyContent: "center",
         margin: "3%",
-        backgroundColor: "#00BFFF",
+        backgroundColor: "#92A8D1",
         width: "300px",
         height: "390px",
         borderRadius: "4%",

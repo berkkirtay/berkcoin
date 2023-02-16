@@ -10,6 +10,7 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "./IBerkToken.sol";
 import "./CollectibleToken.sol";
+import "./Social.sol";
 
 contract BerkToken is IBerkToken, ERC20 {
     address public owner;
@@ -29,10 +30,13 @@ contract BerkToken is IBerkToken, ERC20 {
     CollectibleToken private collectibleToken;
     uint256 public collectibleFee;
 
+    Social private social;
+
     constructor() ERC20("berkcoin", "BERK") {
         owner = msg.sender;
         collectibleToken = new CollectibleToken();
         collectibleFee = collectibleToken.getTransactionFee();
+        social = new Social();
         // Minting initial tokens
         _mint(msg.sender, maxSupply);
     }
@@ -287,8 +291,6 @@ contract BerkToken is IBerkToken, ERC20 {
         collectibleToken.transferCollectible(msg.sender, tokenID);
     }
 
-    // NFT view functions:
-
     function getTokenURI(uint256 tokenID)
         external
         view
@@ -343,6 +345,47 @@ contract BerkToken is IBerkToken, ERC20 {
 
     function getAccessibility(uint256 tokenID) external view returns (bool) {
         return collectibleToken.getAccessibility(tokenID);
+    }
+
+    // Social handlers:
+    function sendPost(string memory title, string memory text) external {
+        social.sendPost(title, text);
+    }
+
+    function burnPost(uint256 postID) external {
+        social.burnPost(postID);
+    }
+
+    function votePost(uint256 postID, int256 vote) external {
+        social.votePost(postID, vote);
+    }
+
+    function getPostAuthor(uint256 postID) external view returns (address) {
+        return social.getPostAuthor(postID);
+    }
+
+    function getPostTitle(uint256 postID)
+        external
+        view
+        returns (string memory)
+    {
+        return social.getPostTitle(postID);
+    }
+
+    function getPostText(uint256 postID) external view returns (string memory) {
+        return social.getPostText(postID);
+    }
+
+    function getPostDate(uint256 postID) external view returns (uint256) {
+        return social.getPostDate(postID);
+    }
+
+    function getPostUpvotes(uint256 postID) external view returns (int256) {
+        return social.getPostUpvotes(postID);
+    }
+
+    function getPostCount() external view returns (uint256) {
+        return social.getPostCount();
     }
 
     event Sent(address from, address to, uint256 amount);

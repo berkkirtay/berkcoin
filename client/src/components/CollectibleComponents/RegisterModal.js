@@ -31,7 +31,7 @@ const RegisterModal = ({ modalState, setModalState, onRegister, fee }) => {
                         },
                         content: {
                             borderRadius: "4%",
-                            backgroundColor: "#9BB7D4",
+                            backgroundColor: "#92A8D1",
                             width: "35%",
                             height: "60%",
                             margin: "auto"
@@ -39,11 +39,11 @@ const RegisterModal = ({ modalState, setModalState, onRegister, fee }) => {
                     }
                 }>
 
-                <button style={{ "float": "right", "marginTop": "1%" }} onClick={setModalState}>Close</button>
+                <button style={{ float: "right", marginTop: "1%" }} onClick={setModalState}>Close</button>
                 <h1 >Register a NFT:</h1>
                 {tokenURI !== "" &&
-                    <div style={{ float: "right", margin: "5%", textAlign: "center" }} >
-                        <h4>NFT Appearance</h4>
+                    <div style={{ display: "inline", float: "right", margin: "5%", textAlign: "center" }} >
+                        <p>NFT Appearance</p>
                         <img style={{ width: "100px", height: "100px", borderRadius: "10%", margin: "0 auto" }} alt="collectible" src={tokenURI} />
                     </div>
                 }
@@ -64,8 +64,8 @@ const RegisterModal = ({ modalState, setModalState, onRegister, fee }) => {
                     {price !== 0 && <h3 style={{ color: "red", marginLeft: "10%" }}>You will pay {fee} berkcoins registration fee.</h3>}
                     <button style={{ display: "flex", margin: "auto", marginTop: "5%" }}>Register</button>
                 </form>
-            </Modal>
-        </div>
+            </Modal >
+        </div >
     )
 }
 

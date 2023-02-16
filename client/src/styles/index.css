@@ -164,6 +164,7 @@ button:active {
   width: 100%;
   border-collapse: collapse;
 }
+
 .transactionList a {
   color: #00BFFF;
   text-decoration: none;
@@ -179,4 +180,16 @@ td {
   border: 1px solid black;
   text-align: left;
   padding: 5px;
+}
+
+input,
+textarea {
+  white-space: pre-wrap;
+  width: 100%;
+  padding: 10px 20px;
+  margin: 8px 0;
+  border: 1px solid rgb(173, 172, 172);
+  border-radius: 5px;
+  box-sizing: border-box;
+  display: inline-block;
 }

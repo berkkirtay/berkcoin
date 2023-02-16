@@ -19,7 +19,6 @@ const Market = ({ account, contract, refresher }) => {
     useEffect(() => {
         getAllNFTs();
         refresher();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [refresh, refresher])
 
     useEffect(() => {
@@ -94,11 +93,12 @@ const Market = ({ account, contract, refresher }) => {
             <h1>Berkcoin NFT Marketplace</h1>
             <button onClick={registerNFT}>Register a NFT</button>
             <button style={{ float: "right" }} onClick={onSort}>{sort}</button>
-            {modalState === true && <RegisterModal
-                modalState={modalState}
-                setModalState={() => setModalState(!modalState)}
-                onRegister={onRegister}
-                fee={fee} />
+            {modalState === true &&
+                <RegisterModal
+                    modalState={modalState}
+                    setModalState={() => setModalState(!modalState)}
+                    onRegister={onRegister}
+                    fee={fee} />
             }
             <ul style={{ listStyleType: "none" }}>
                 {collectibles !== undefined && collectibles.slice(0).map((collectible) => (

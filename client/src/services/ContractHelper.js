@@ -85,7 +85,7 @@ export const getCollectible = async (contract, account, collectibleIndex) => {
 };
 
 export const getTransactions = async (account, contract, web3) => {
-    const contractAddress = "0x4f96994119416199e1276a59b580e070278da3a1";
+    const contractAddress = "0x8Bc1df7C214a04B61264882469490650C3A229C3";
 
     abiDecoder.addABI(BerkToken.abi);
     const transactions = [];
@@ -102,7 +102,8 @@ export const getTransactions = async (account, contract, web3) => {
                 if (filteredTransactions.has(transaction.hash) === false) {
                     filteredTransactions.add(transaction.hash);
                     var value = 0;
-                    if (decodedLog.name === "send" || decodedLog.name === "stake") {
+                    if (decodedLog.name === "send"
+                        || decodedLog.name === "stake") {
                         const params = decodedLog.params;
                         value = params[1].value;
                     }
@@ -116,4 +117,35 @@ export const getTransactions = async (account, contract, web3) => {
         }
     })
     return transactions;
-}
+};
+
+export const getPosts = async (account, contract) => {
+    const posts = [];
+
+    const postCount = await contract.methods.getPostCount()
+        .call({ from: account });
+
+    for (var i = 0; i <= postCount; i++) {
+        const postAuthor = await contract.methods.getPostAuthor(i)
+            .call({ from: account });
+        const postTitle = await contract.methods.getPostTitle(i)
+            .call({ from: account });
+        const postText = await contract.methods.getPostText(i)
+            .call({ from: account });
+        const postDate = await contract.methods.getPostDate(i)
+            .call({ from: account });
+        const postUpvotes = await contract.methods.getPostUpvotes(i)
+            .call({ from: account });
+
+        const post = {
+            "id": i,
+            "author": postAuthor,
+            "title": postTitle,
+            "text": postText,
+            "date": postDate,
+            "upvotes": postUpvotes
+        };
+        posts.push(post);
+    }
+    return posts;
+};

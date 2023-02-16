@@ -114,7 +114,7 @@ export const CollectibleModal = ({ account, collectible, collectibleModalState,
                             },
                             content: {
                                 borderRadius: "4%",
-                                backgroundColor: "#00BFFF",
+                                backgroundColor: "#92A8D1",
                                 width: "28%",
                                 height: "38%",
                                 margin: "auto"

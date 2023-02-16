@@ -119,7 +119,9 @@ function App() {
           balance={balance} />} />
 
         <Route path='/social' element={<Social
-        />} />
+          account={accounts[0]}
+          contract={contract}
+          refresher={() => getBalance()} />} />
       </Routes>
     </Router>
   );
