@@ -5,9 +5,9 @@
 **Berkcoin is an interactive token environment that allows users to trade and stake their tokens along with NFT features.
 It uses ERC20 token standard with its own features. Contracts are deployed with truffle framework.
 This project aims to be a basic token environment with standard features. 
-To ensure integrity and functionality of contracts I included unit tests and CI.**
+To ensure integrity and functionality of contracts I included unit tests with GitHub Actions CI.**
 
-**Website is deployed on ropsten testnet at: [berkkirtay.github.io/berkcoin](https://berkkirtay.github.io/berkcoin)**
+**Website is deployed on Goerli testnet at: [berkkirtay.github.io/berkcoin](https://berkkirtay.github.io/berkcoin)**
 
 ## Basic usage:
 Any wallet provider can be used via getWeb3 function.
