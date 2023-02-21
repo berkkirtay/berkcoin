@@ -52,7 +52,11 @@ const Market = ({ account, contract, refresher }) => {
     }
 
     const onSetPrice = async (tokenID, newPrice, availability) => {
-        const oldPrice = collectibles.find({ tokenID }).priceOfCollectible;
+        let oldPrice = 0;
+        collectibles.find((collectible) => {
+            if (collectible.tokenID === tokenID)
+                oldPrice = collectible.priceOfCollectible;
+        });
         if (oldPrice !== newPrice) {
             await contract.methods.setPriceOfCollectible(tokenID, newPrice)
                 .send({ from: account });
@@ -73,7 +77,7 @@ const Market = ({ account, contract, refresher }) => {
                 return b.priceOfCollectible - a.priceOfCollectible;
             });
             setCollectibles(sortedArr);
-            setSort("Sort By Default");
+            setSort("Sort By Date");
         }
         else {
             setSort("Sort By Price");

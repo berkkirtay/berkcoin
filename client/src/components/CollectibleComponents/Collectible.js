@@ -34,23 +34,22 @@ const Collectible = ({ account, collectible, onBuy, onSetPrice, onBurn, fee }) =
     }
 
     return (
+        <li key={collectible.tokenID}>
+            <div onClick={changeModalState} style={collectibleStyle}>
 
-        <div onClick={changeModalState} style={collectibleStyle}>
-
-            {collectibleModalState === true &&
-                <CollectibleModal
-                    account={account}
-                    collectible={collectible}
-                    collectibleModalState={collectibleModalState}
-                    setCollectibleModalState={changeModalState}
-                    onBuyRequest={onBuyRequest}
-                    onUpdatePrice={onUpdatePrice}
-                    onBurnRequest={onBurnRequest}
-                    fee={fee}
-                />
-            }
-            <div style={{ margin: "10px" }}>
-                <li key={collectible.tokenID}>
+                {collectibleModalState === true &&
+                    <CollectibleModal
+                        account={account}
+                        collectible={collectible}
+                        collectibleModalState={collectibleModalState}
+                        setCollectibleModalState={changeModalState}
+                        onBuyRequest={onBuyRequest}
+                        onUpdatePrice={onUpdatePrice}
+                        onBurnRequest={onBurnRequest}
+                        fee={fee}
+                    />
+                }
+                <div style={{ margin: "10px" }}>
                     <div style={{ backgroundColor: collectible.priceLevel, borderRadius: "4%" }}>
                         <img style={{ width: "250px", height: "250px", borderRadius: "10%", padding: "5px" }}
                             alt={collectible.tokenDescription} src={collectible.tokenURI} />
@@ -66,9 +65,10 @@ const Collectible = ({ account, collectible, onBuy, onSetPrice, onBurn, fee }) =
                             (On sale)
                         </p>
                     }
-                </li>
+
+                </div>
             </div>
-        </div>
+        </li>
     )
 }
 

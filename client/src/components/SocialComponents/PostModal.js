@@ -3,13 +3,11 @@ import Modal from "react-modal";
 Modal.setAppElement('#root');
 
 const PostModal = ({ modalState, setModalState, onSend }) => {
-    const [title, setTitle] = useState("");
     const [text, setText] = useState("");
 
     const onSubmit = (e) => {
         e.preventDefault();
-        onSend(title, text);
-        setTitle("");
+        onSend(text);
         setText("");
         setModalState();
     }
@@ -31,7 +29,7 @@ const PostModal = ({ modalState, setModalState, onSend }) => {
                             borderRadius: "4%",
                             backgroundColor: "#92A8D1",
                             width: "35%",
-                            height: "50%",
+                            height: "55%",
                             margin: "auto"
                         },
                     }
@@ -40,13 +38,11 @@ const PostModal = ({ modalState, setModalState, onSend }) => {
                 <button style={{ float: "right", marginTop: "1%" }} onClick={setModalState}>Close</button>
                 <h1>Send a new post:</h1>
                 <form onSubmit={onSubmit}>
-                    <label>Title: </label>
-                    <input type="string" required
-                        value={title} onChange={(e) => setTitle(e.target.value)} />
-                    <label>Text: </label>
+                    <label>You can write your post in markdown format: </label>
                     <textarea type="string" required
                         value={text} onChange={(e) => setText(e.target.value)}
-                        style={{ height: "200px" }} />
+                        style={{ height: "260px" }} />
+                    <h3 style={{ display: "flex", color: "red", margin: "auto 0" }}>You will pay 10000 berkcoins posting fee.</h3>
                     <button style={{ display: "flex", margin: "auto", marginTop: "5%" }}>Send</button>
                 </form>
             </Modal >

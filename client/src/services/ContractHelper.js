@@ -125,10 +125,8 @@ export const getPosts = async (account, contract) => {
     const postCount = await contract.methods.getPostCount()
         .call({ from: account });
 
-    for (var i = 0; i <= postCount; i++) {
+    for (var i = postCount; i >= 0; i--) {
         const postAuthor = await contract.methods.getPostAuthor(i)
-            .call({ from: account });
-        const postTitle = await contract.methods.getPostTitle(i)
             .call({ from: account });
         const postText = await contract.methods.getPostText(i)
             .call({ from: account });
@@ -140,7 +138,6 @@ export const getPosts = async (account, contract) => {
         const post = {
             "id": i,
             "author": postAuthor,
-            "title": postTitle,
             "text": postText,
             "date": postDate,
             "upvotes": postUpvotes

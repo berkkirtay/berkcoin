@@ -28,15 +28,17 @@ contract BerkToken is IBerkToken, ERC20 {
     uint256 private maxSupply = 100000000 * 10**18;
 
     CollectibleToken private collectibleToken;
-    uint256 public collectibleFee;
+    uint256 private collectibleFee;
 
     Social private social;
+    uint256 private postingFee;
 
     constructor() ERC20("berkcoin", "BERK") {
         owner = msg.sender;
         collectibleToken = new CollectibleToken();
         collectibleFee = collectibleToken.getTransactionFee();
         social = new Social();
+        postingFee = social.getPostingFee();
         // Minting initial tokens
         _mint(msg.sender, maxSupply);
     }
@@ -348,28 +350,26 @@ contract BerkToken is IBerkToken, ERC20 {
     }
 
     // Social handlers:
-    function sendPost(string memory title, string memory text) external {
-        social.sendPost(title, text);
+    function sendPost(string memory text) external {
+        require(
+            balanceOf(owner) >= postingFee,
+            "Sender must own berkcoins to post!"
+        );
+        _transfer(msg.sender, owner, postingFee);
+
+        social.sendPost(text, msg.sender);
     }
 
     function burnPost(uint256 postID) external {
-        social.burnPost(postID);
+        social.burnPost(postID, msg.sender);
     }
 
     function votePost(uint256 postID, int256 vote) external {
-        social.votePost(postID, vote);
+        social.votePost(postID, vote, msg.sender);
     }
 
     function getPostAuthor(uint256 postID) external view returns (address) {
         return social.getPostAuthor(postID);
-    }
-
-    function getPostTitle(uint256 postID)
-        external
-        view
-        returns (string memory)
-    {
-        return social.getPostTitle(postID);
     }
 
     function getPostText(uint256 postID) external view returns (string memory) {

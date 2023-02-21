@@ -16,8 +16,8 @@ contract CollectibleToken {
         uint256 lastTokenPrice;
     }
 
-    uint256 public tokenCounter;
-    uint256 public transactionFee;
+    uint256 private tokenCounter;
+    uint256 private transactionFee;
 
     mapping(uint256 => Collectible) public collectibles;
     mapping(uint256 => address) public collectibleOwners;
@@ -55,7 +55,7 @@ contract CollectibleToken {
             description,
             price
         );
-        
+
         availableToTradeCollectibles[tokenCounter] = isAvailableToTrade;
         collectibleURIs[tokenURI] = tokenCounter;
         collectibleOwners[tokenCounter++] = owner;
