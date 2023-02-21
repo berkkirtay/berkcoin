@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "1850e007181e6cb20aa8b3f76f254806",
+    "revision": "55c4405f9e9cd74a4c78d4b58441f24c",
     "url": "/berkcoin/index.html"
   },
   {
-    "revision": "034fbb519cf6747cf5c0",
+    "revision": "8eff92855706a50065b1",
     "url": "/berkcoin/static/css/main.57d50b6f.chunk.css"
   },
   {
@@ -12,8 +12,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/berkcoin/static/js/2.e02a1ec7.chunk.js"
   },
   {
-    "revision": "034fbb519cf6747cf5c0",
-    "url": "/berkcoin/static/js/main.774ea150.chunk.js"
+    "revision": "8eff92855706a50065b1",
+    "url": "/berkcoin/static/js/main.7f25125b.chunk.js"
   },
   {
     "revision": "c89cea6214a822b89b34",
